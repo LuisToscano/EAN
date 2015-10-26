@@ -1,0 +1,28 @@
+{
+    "tipologia" : "sencillo",
+    "drags": {
+        "1": {
+            "contenido": "prueba 1"
+        },
+        "2": {
+            "contenido": "prueba 2"
+        },
+        "3": {
+            "contenido": "prueba 3"
+        }
+    },
+    "drops": {
+        "1": {
+            "tag" : "",
+            "accepted": ["3"]
+        },
+        "2": {
+            "tag" : "",
+            "accepted": ["1"]
+        },
+        "3": {
+            "tag" : "",
+            "accepted": ["2"]
+        }
+    }
+}
