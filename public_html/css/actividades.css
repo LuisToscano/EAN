@@ -24,3 +24,9 @@ div.simpleDropElement{
     width: 100px;
 }
 
+div.categoryDropElement{
+    border: 1px solid black;
+    height: 400px;
+    width: 400px;
+}
+
