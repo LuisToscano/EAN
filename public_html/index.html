@@ -12,8 +12,10 @@ and open the template in the editor.
         <link href="css/actividades.css" rel="stylesheet" type="text/css"/>
         <script src="js/jquery-1.11.3.min.js" type="text/javascript"></script>
         <script src="js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+        <script src="js/jquery.preguntas.js" type="text/javascript"></script>
         <script src="js/jquery.dragDrop.js" type="text/javascript"></script>
         <script>
+            /*
             $("document").ready(function(){
                 $("#prueba").dragAndDrop({
                     tipologia : "categoria",
@@ -41,6 +43,79 @@ and open the template in the editor.
                         }
                     }
                 });                
+            });*/
+        $("document").ready(function(){
+            $("#prueba").generarPreguntas({
+                cantidad_preguntas : 2,
+                preguntas:[
+                    {
+                        tipo : "pick_many",
+                        pregunta : "¿De qué color es la nieve?",
+                        picks : {
+                            1:{
+                                tag : "Verde",
+                                correct : false
+                            },
+                            2: {
+                                tag : "Roja",
+                                correct: false
+                            },
+                            3:{
+                                tag : "Blanca",
+                                correct : true
+                            },
+                            4:{
+                                tag: "Amarilla",
+                                correct : false
+                            }
+                        }
+                    },              
+                    {
+                        tipo : "pick_many",
+                        pregunta : "¿2+2?",
+                        picks : {
+                            1:{
+                                tag : "4",
+                                correct : true
+                            },
+                            2: {
+                                tag : "22",
+                                correct: false
+                            },
+                            3:{
+                                tag : "5",
+                                correct : false
+                            },
+                            4:{
+                                tag: "3",
+                                correct : false
+                            }
+                        }
+                    },               
+                    {
+                        tipo : "pick_many",
+                        pregunta : "¿Cuántas patas tiene una araña?",
+                        picks : {
+                            1:{
+                                tag : "6",
+                                correct : false
+                            },
+                            2: {
+                                tag : "8",
+                                correct: true
+                            },
+                            3:{
+                                tag : "2",
+                                correct : false
+                            },
+                            4:{
+                                tag: "10",
+                                correct : false
+                            }
+                        }
+                    }
+                ]
+            })
             });
         </script>
     </head>

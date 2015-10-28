@@ -30,3 +30,10 @@ div.categoryDropElement{
     width: 400px;
 }
 
+div[id^="tab"] {
+    display: none;
+}
+
+span.numeracion{
+    font-weight: bold;
+}
