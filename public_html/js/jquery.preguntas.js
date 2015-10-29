@@ -8,6 +8,8 @@
     $.fn.extend({ 
        generarPreguntas: function(config){
           $container = $(this);
+          $container.prop("info", {preguntas:{}, tipo: "one"});
+          var foo = $container.prop("info");
           shuffle(config.preguntas);
           if(config.hasOwnProperty("cantidad_preguntas") && config.hasOwnProperty("preguntas")){
           var preguntas = config.preguntas;
@@ -16,19 +18,61 @@
           }
           var cont = 0;
           $.each(preguntas, function(key, value){
+               foo.preguntas[key] = {correct: false};
                $question_tab = $("<div>",{"id": "tab_pregunta_"+cont});
                $span = $("<span>",{"class":"numeracion"});
-               $span.html(cont+". ");
+               $span.html((cont+1)+". ");
                $p = $("<p>",{"class":"pregunta"}).html(value.pregunta);
                $p.prepend($span);
                $question_tab.append($p);
-              switch(value.tipo){
+                switch(value.tipo){
                   case "pick_many":{
+                    var contador = 0;
+                    $.each(value.picks, function(keys, values){
+                        if(values.correct){
+                            contador++;
+                            if(contador>1){
+                                foo.tipo = "many";
+                                return false;
+                            }
+                        }
+                    });
+
+                    $.each(value.picks, function(keys, values){
+                        var $input;
+                        if(!values.hasOwnProperty("correct")){
+                            values.correct = false;
+                        }
+                        if(foo.tipo === "many"){
+                            $input = $("<input>",{"type": "checkbox", "name": "pregunta_"+key+"_"+keys, "option_number": keys});
+                            $input.prop("correct", values.correct);
+                            $input.click(function(){
+                               var correcto = true;
+                               $("input[name^=pregunta_"+key+"]").each(function(){
+                                   if(($(this).prop("correct") && !$(this).is(':checked')) || (!$(this).prop("correct") && $(this).is(':checked'))){
+                                      correcto = false;
+                                      return false;
+                                   }
+                               });
+                               foo.preguntas[key].correct = correcto;
+                               alert(foo.preguntas[key].correct);
+                            });
+                        }else{
+                            $input = $("<input>",{"type": "radio", "name": "pregunta_"+key, "option_number": keys});
+                            $input.prop("correct", values.correct);
+                            $input.click(function(){
+                                foo.preguntas[key].correct = $(this).is(':checked') && $(this).prop("correct");
+                            });
+                        }
+                        
+                        $p = $("<p>",{"class":"opcion_respuesta"}).html(values.tag);
+                        $p.prepend($input);
+                        $question_tab.append($p);
+                    });
                     break;
                   }
               }
               $container.append($question_tab);
-              console.log($container);
               cont++;
           });
           $("#tab_pregunta_0").show();
