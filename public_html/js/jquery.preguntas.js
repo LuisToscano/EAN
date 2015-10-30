@@ -8,7 +8,7 @@
     $.fn.extend({ 
        generarPreguntas: function(config){
           $container = $(this);
-          $container.prop("info", {preguntas:{}, tipo: "one"});
+          $container.prop("info", {preguntas:{}, tipo: "one", current_question: 0});
           var foo = $container.prop("info");
           shuffle(config.preguntas);
           if(config.hasOwnProperty("cantidad_preguntas") && config.hasOwnProperty("preguntas")){
@@ -18,7 +18,7 @@
           }
           var cont = 0;
           $.each(preguntas, function(key, value){
-               foo.preguntas[key] = {correct: false};
+               foo.preguntas[key] = {correct: false, answered: false};
                $question_tab = $("<div>",{"id": "tab_pregunta_"+cont});
                $span = $("<span>",{"class":"numeracion"});
                $span.html((cont+1)+". ");
@@ -55,13 +55,13 @@
                                    }
                                });
                                foo.preguntas[key].correct = correcto;
-                               alert(foo.preguntas[key].correct);
                             });
                         }else{
                             $input = $("<input>",{"type": "radio", "name": "pregunta_"+key, "option_number": keys});
                             $input.prop("correct", values.correct);
                             $input.click(function(){
                                 foo.preguntas[key].correct = $(this).is(':checked') && $(this).prop("correct");
+                                foo.preguntas[key].answered = true;
                             });
                         }
                         
@@ -75,6 +75,38 @@
               $container.append($question_tab);
               cont++;
           });
+          $btn = $("<button>",{"class": "btnPreguntas"});
+          $btn.click(function(){
+              if(!foo.preguntas[foo.current_question].answered){
+                  alert("Debe responder la pregunta antes de enviar");
+                  return;
+              }
+              
+              if(foo.preguntas[foo.current_question].correct){
+                  alert("correcto");
+              }else{
+                  alert("incorrecto");
+              }
+              foo.current_question++;
+              $button = $(this);
+              $button.prop("disabled", true)
+              if($("div[id=tab_pregunta_"+foo.current_question+"]").length>0){
+                  $("div[id=tab_pregunta_"+(foo.current_question-1)+"]").fadeOut(500, function(){
+                      $("div[id=tab_pregunta_"+foo.current_question+"]").fadeIn(500); 
+                      $button.prop("disabled", false); 
+                  });
+              }else{
+                  var correctas = 0;
+                  $.each(foo.preguntas, function(key, value){
+                      if(value.correct){
+                          correctas++;
+                      }                 
+                  });
+                  alert("Resultado: "+((correctas/Object.keys(foo.preguntas).length)*100)+"%");
+              }
+          });
+          $btn.html("Enviar Respuesta");
+          $container.append($btn);
           $("#tab_pregunta_0").show();
         }
         else{
