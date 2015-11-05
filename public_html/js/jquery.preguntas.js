@@ -7,7 +7,7 @@
 (function($){
     $.fn.extend({ 
        generarPreguntas: function(config){
-          $container = $(this);
+          var $container = $(this);
           $container.prop("info", {preguntas:{}, tipo: "one", current_question: 0});
           var foo = $container.prop("info");
           shuffle(config.preguntas);
@@ -19,13 +19,16 @@
           var cont = 0;
           $.each(preguntas, function(key, value){
                foo.preguntas[key] = {correct: false, answered: false};
-               $question_tab = $("<div>",{"id": "tab_pregunta_"+cont});
-               $span = $("<span>",{"class":"numeracion"});
+               var $question_tab = $("<div>",{"id": "tab_pregunta_"+cont});
+               var $span = $("<span>",{"class":"numeracion"});
                $span.html((cont+1)+". ");
-               $p = $("<p>",{"class":"pregunta"}).html(value.pregunta);
+               var $p = $("<p>",{"class":"pregunta"}).html(value.pregunta);
                $p.prepend($span);
                $question_tab.append($p);
                 switch(value.tipo){
+                    
+                  /**************************PICK MANY************************/
+                  
                   case "pick_many":{
                     var contador = 0;
                     $.each(value.picks, function(keys, values){
@@ -71,11 +74,80 @@
                     });
                     break;
                   }
+                  
+                   /**************************SORTABLE************************/
+                  
+                  case "sortable":{
+                    var contador = 0;
+                    var $ul = $("<ul>", {class: "listaSortable"});
+                    $.each(value.elementos, function(keys, values){
+                            var $li = $("<li>", {id: keys});
+                            $li.html(values.tag);
+                            $ul.append($li);
+                    });
+                    
+                    $ul.sortable({stop: function(){
+                        var curArray = []
+                        $("li", $ul).each(function(){
+                           curArray.push(parseInt($(this).attr("id"))); 
+                        });
+                        foo.preguntas[key].correct = equalsArrays(curArray, value.orden);
+                        foo.preguntas[key].answered = true;
+                    }});
+                    $question_tab.append($ul);
+                    break;
+                  }
+                  
+                   /**************************COMPLETAR************************/
+                  
+                  case "completar":{
+                    $p = $("<p>", {class: "parrafoCompletar"});
+                    var replaceStr = value.parrafo;
+                    while(replaceStr.indexOf("<espacio>")>0){
+                        replaceStr = replaceStr.replace("<espacio>", "<input type='text' initialized='false'>"); 
+                    }
+                    $p.html(replaceStr);
+                    
+                    if(Object.keys(value.respuestas).length !== $("input", $p).length){
+                        console.log("ERROR: La cantidad de espacios en el párrafo y respuestas en la configuración no concuerdan");
+                    } 
+                    
+                    $.each(value.respuestas, function(keys, values){
+                        var $next = $("input[initialized='false']", $p).first();
+                        if($next.length>0){
+                            $next.removeAttr("initialized");
+                            $next.prop("key", keys);
+                        }
+                    });
+                    
+                    $("input", $p).change(function(){
+                        var correct = true;
+                        $("input", $p).each(function(){
+                            var thekey = $(this).prop("key");
+                            if(value.ignore_caps){
+                                if($(this).val().trim().toLowerCase() !== value.respuestas[thekey].trim()){
+                                    correct = false;
+                                    return false;
+                                }
+                            }else{
+                                if($(this).val().trim() !== value.respuestas[thekey].trim()){
+                                    correct = false;
+                                    return false;
+                                }
+                            }
+                        });
+                        
+                        foo.preguntas[key].correct = correct;
+                        foo.preguntas[key].answered = true;
+                    });
+                    $question_tab.append($p);
+                    break;
+                  }
               }
               $container.append($question_tab);
               cont++;
           });
-          $btn = $("<button>",{"class": "btnPreguntas"});
+          var $btn = $("<button>",{"class": "btnPreguntas"});
           $btn.click(function(){
               if(!foo.preguntas[foo.current_question].answered){
                   alert("Debe responder la pregunta antes de enviar");
@@ -88,7 +160,7 @@
                   alert("incorrecto");
               }
               foo.current_question++;
-              $button = $(this);
+              var $button = $(this);
               $button.prop("disabled", true)
               if($("div[id=tab_pregunta_"+foo.current_question+"]").length>0){
                   $("div[id=tab_pregunta_"+(foo.current_question-1)+"]").fadeOut(500, function(){
@@ -133,4 +205,18 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+function equalsArrays(a,b){
+    if(a.length !== b.length){
+        return false;
+    }
+    
+    for(var i=0; i<a.length; i++){
+        if(a[i]!==b[i]){
+            return false;
+        }
+    }
+    
+    return true;
 }

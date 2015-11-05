@@ -47,7 +47,7 @@ and open the template in the editor.
     
         $("document").ready(function(){
             $("#prueba").generarPreguntas({
-                cantidad_preguntas : 2,
+                cantidad_preguntas : 4,
                 preguntas:[
                     {
                         tipo : "pick_many",
@@ -69,41 +69,34 @@ and open the template in the editor.
                         }
                     },              
                     {
-                        tipo : "pick_many",
-                        pregunta : "¿2+2?",
-                        picks : {
+                        tipo : "sortable",
+                        pregunta : "Ordene la lista",
+                        elementos : {
                             1:{
-                                tag : "4",
-                                correct : true
+                                tag : "Tercer elemento"
                             },
                             2: {
-                                tag : "22"
+                                tag : "Cuarto elemento"
                             },
                             3:{
-                                tag : "5"
+                                tag : "Primer elemento"
                             },
                             4:{
-                                tag: "3"
+                                tag: "Segundo elemento"
                             }
-                        }
-                    },               
+                        },
+                        orden: [3,4,1,2]
+                    }
+                    ,              
                     {
-                        tipo : "pick_many",
-                        pregunta : "¿Cuántas patas tiene una araña?",
-                        picks : {
-                            1:{
-                                tag : "6"
-                            },
-                            2: {
-                                tag : "8",
-                                correct: true
-                            },
-                            3:{
-                                tag : "2"
-                            },
-                            4:{
-                                tag: "10"
-                            }
+                        tipo : "completar",
+                        pregunta : "Complete los espacios en blanco",
+                        parrafo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, <espacio> do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud <espacio> ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <espacio> sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+                        ignore_caps: true,
+                        respuestas: {
+                            1: "prueba 1",
+                            2: "prueba 2",
+                            3: "prueba 3"
                         }
                     }
                 ]
