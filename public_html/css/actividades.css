@@ -8,32 +8,35 @@ and open the template in the editor.
     Author     : End User
 */
 
-div.dragElement{
-    border: 1px solid black;
-    padding: 5px;
-    display: inline-block;
-}
-
-div.dragElement:hover{
-    cursor: pointer;
-}
-
-div.simpleDropElement{
-    border: 1px solid black;
-    height: 100px;
-    width: 100px;
-}
-
-div.categoryDropElement{
-    border: 1px solid black;
-    height: 400px;
-    width: 400px;
-}
-
 div[id^="tab"] {
     display: none;
 }
 
 span.numeracion{
     font-weight: bold;
+}
+
+/*------------------------------ RELACIONAR --------------------------------------*/
+
+.relacionarContainer{
+    display:flex;
+    flex-direction: row;
+}
+
+.relacionarContainer .relacionarSpacer{
+    width: 150px;
+}
+
+.relacionarContainer .relacionarColumna1 div, .relacionarContainer .relacionarColumna2 div{
+    margin: 5px;
+    padding: 5px;
+    background-color: lightgray; 
+}
+
+.relacionarContainer .relacionarColumna1 div span, .relacionarContainer .relacionarColumna2 div span{
+    max-width: 100px;
+}
+
+.relacionarContainer .relacionarColumna1 div:hover, .relacionarContainer .relacionarColumna2 div:hover{
+    cursor: pointer;
 }

@@ -7,7 +7,7 @@
 (function($){
     $.fn.extend({ 
        dragAndDrop: function(config){
-           $container = $(this);
+           var $container = $(this);
            $container.prop("info", {drags:{}, drops:{}, intentos: 0});
            var foo = $container.prop("info");
            if(config.hasOwnProperty("tipologia") && 
@@ -28,7 +28,7 @@
                          switch(config.tipo_drags){
                              case "texto":{
                                if(value.hasOwnProperty("contenido")){
-                                $span = $("<span>").html(value.contenido);
+                                var $span = $("<span>").html(value.contenido);
                                 $drag = $("<div>",{"class": "dragElement"}).html($span);
                                }
                                else{
@@ -61,7 +61,7 @@
                      
                      $.each(config.drops, function(key, value){
                          foo.drops[key] = {};
-                         $drop = $("<div>",{"class": "simpleDropElement"});
+                         var $drop = $("<div>",{"class": "simpleDropElement"});
                          foo.drops[key].obj = $drop;
                          foo.drops[key].current_drag = null;
                          foo.drops[key].correct = false;
@@ -107,7 +107,7 @@
                          switch(config.tipo_drags){
                              case "texto":{
                                if(value.hasOwnProperty("contenido")){
-                                $span = $("<span>").html(value.contenido);
+                                var $span = $("<span>").html(value.contenido);
                                 $drag = $("<div>",{"class": "dragElement"}).html($span);
                                }
                                else{
@@ -140,7 +140,7 @@
                      
                      $.each(config.drops, function(key, value){
                          foo.drops[key] = {};
-                         $drop = $("<div>",{"class": "categoryDropElement"});
+                         var $drop = $("<div>",{"class": "categoryDropElement"});
                          foo.drops[key].obj = $drop;
                          foo.drops[key].current_drags = {};
                          foo.drops[key].correct = false;
@@ -183,7 +183,7 @@
                    }
                    }
                      
-                     $button = $("<button>",{"class": "dragDropButton"});
+                     var $button = $("<button>",{"class": "dragDropButton"});
                      $button.html("Enviar");
                      
                      $button.click(function(){

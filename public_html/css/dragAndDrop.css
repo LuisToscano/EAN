@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 05-nov-2015, 22:54:54
+    Author     : End User
+*/
+
+div.dragElement{
+    border: 1px solid black;
+    padding: 5px;
+    display: inline-block;
+}
+
+div.dragElement:hover{
+    cursor: pointer;
+}
+
+div.simpleDropElement{
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+}
+
+div.categoryDropElement{
+    border: 1px solid black;
+    height: 400px;
+    width: 400px;
+}
