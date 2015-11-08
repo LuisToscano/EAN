@@ -8,9 +8,19 @@ and open the template in the editor.
     Author     : End User
 */
 
+div.dragContainer{
+    display:flex;
+    flex-direction: row;
+    margin: 5px;
+}
+
+div.dropContainer{
+    display:flex;
+    flex-direction: row;
+}
+
 div.dragElement{
-    border: 1px solid black;
-    padding: 5px;
+    margin: 5px;
     display: inline-block;
 }
 
@@ -18,14 +28,59 @@ div.dragElement:hover{
     cursor: pointer;
 }
 
+div.dragElement img{
+    width: 80px;
+    height: 80px;
+    border: 1px solid black;
+}
+
 div.simpleDropElement{
     border: 1px solid black;
     height: 100px;
     width: 100px;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 div.categoryDropElement{
     border: 1px solid black;
     height: 400px;
     width: 400px;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
+
+div.simpleDropElement img, div.categoryDropElement img{
+    max-width:100%;
+    max-height:100%;
+    height: 100%;
+    width: 100%;
+}
+
+div.categoryDropElement span{
+    display: block;
+    margin: 0 auto;
+}
+
+div.simpleDropElement span{
+    display: block;
+    margin: 0 auto;
+}
+
+div.audiobtn{
+    padding: 5px;
+    border-radius: 25%;
+    background-color: cornflowerblue;
+    color: white;
+    width: 30px;
+    text-align: center;
+}
+
+button.dragDropButton{
+    
+}
+

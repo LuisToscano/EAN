@@ -8,7 +8,7 @@
     $.fn.extend({
         generarPreguntas: function (config) {
             var $container = $(this);
-            $container.prop("info", {preguntas: {}, tipo: "one", current_question: 0});
+            $container.prop("info", {preguntas: {}, current_question: 0});
             var foo = $container.prop("info");
             shuffle(config.preguntas);
             if (config.hasOwnProperty("cantidad_preguntas") && config.hasOwnProperty("preguntas")) {
@@ -18,7 +18,12 @@
                 }
                 var cont = 0;
                 $.each(preguntas, function (key, value) {
-                    foo.preguntas[key] = {correct: false, answered: false};
+                    if (!value.hasOwnProperty("puntaje")) {
+                        console.error("A una pregunta no se le ha asignado puntaje");
+                        value.puntaje = 1;
+                    }
+
+                    foo.preguntas[key] = {correct: false, answered: false, puntaje: value.puntaje};
                     var $question_tab = $("<div>", {"id": "tab_pregunta_" + cont});
                     var $span = $("<span>", {"class": "numeracion"});
                     $span.html((cont + 1) + ". ");
@@ -32,11 +37,12 @@
                         case "pick_many":
                         {
                             var contador = 0;
+                            foo.preguntas[key].tipo = "one";
                             $.each(value.picks, function (keys, values) {
                                 if (values.correct) {
                                     contador++;
                                     if (contador > 1) {
-                                        foo.tipo = "many";
+                                        foo.preguntas[key].tipo = "many";
                                         return false;
                                     }
                                 }
@@ -47,7 +53,7 @@
                                 if (!values.hasOwnProperty("correct")) {
                                     values.correct = false;
                                 }
-                                if (foo.tipo === "many") {
+                                if (foo.preguntas[key].tipo === "many") {
                                     $input = $("<input>", {"type": "checkbox", "name": "pregunta_" + key + "_" + keys, "option_number": keys});
                                     $input.prop("correct", values.correct);
                                     $input.click(function () {
@@ -59,6 +65,7 @@
                                             }
                                         });
                                         foo.preguntas[key].correct = correcto;
+                                        foo.preguntas[key].answered = true;
                                     });
                                 } else {
                                     $input = $("<input>", {"type": "radio", "name": "pregunta_" + key, "option_number": keys});
@@ -114,15 +121,16 @@
                             if (Object.keys(value.respuestas).length !== $("input", $p).length) {
                                 console.log("ERROR: La cantidad de espacios en el párrafo y respuestas en la configuración no concuerdan");
                             }
-
+                            
                             $.each(value.respuestas, function (keys, values) {
                                 var $next = $("input[initialized='false']", $p).first();
+                                $next.attr("size", 10);
                                 if ($next.length > 0) {
                                     $next.removeAttr("initialized");
                                     $next.prop("key", keys);
                                 }
                             });
-
+                            
                             $("input", $p).change(function () {
                                 var correct = true;
                                 $("input", $p).each(function () {
@@ -139,13 +147,23 @@
                                         }
                                     }
                                 });
+                                
+                                var answered = true;
+                                $(".parrafoCompletar input[type=text]").each(function(){
+                                    if($(this).val().trim().length===0){
+                                        answered = false;
+                                        return false;
+                                    }
+                                });
 
                                 foo.preguntas[key].correct = correct;
-                                foo.preguntas[key].answered = true;
+                                foo.preguntas[key].answered = answered;
                             });
                             $question_tab.append($p);
                             break;
                         }
+
+                        /**************************RELACIONAR************************/
 
                         case "relacionar":
                         {
@@ -153,7 +171,7 @@
                                 console.log("El numero de elementos en cada columna no coincide");
                                 return false;
                             }
-                            
+
                             var selected = null;
 
                             var $rContainer = $("<div>", {class: "relacionarContainer"});
@@ -161,7 +179,6 @@
                             $.each(value.columna_1, function (keys, values) {
                                 var $div = $("<div>");
                                 $div.prop("key", keys);
-                                $div.prop("selected", false);
                                 switch (value.tipo_columna_1) {
                                     case "texto":
                                     {
@@ -174,25 +191,37 @@
                                         }
                                     }
                                 }
-                                
-                                $div.click(function(){
+
+                                $div.click(function () {
                                     selected = $(this);
                                     var color = getRandomColor();
                                     $(this).prop("color", color);
-                                    $(this).css("border", "3px solid "+color);
+                                    $(this).css("border", "3px solid " + color);
+
+                                    var thekey = $(this).prop("key");
+                                    $(".relacionarContainer .relacionarColumna2 div").each(function () {
+                                        if ($(this).prop("current_col1") == thekey) {
+                                            $(this).css("border", "0px");
+                                            $(this).prop("current_col1", null);
+                                            $(this).prop("correct", false);
+                                            foo.preguntas[key].correct = false;
+                                            foo.preguntas[key].answered = false;
+                                        }
+                                    });
                                 });
-                                
+
                                 $columna_1.append($div);
                             });
+
                             $rContainer.append($columna_1);
                             var $spacer = $("<div>", {class: "relacionarSpacer"});
                             $rContainer.append($spacer);
-                            
+
                             var $columna_2 = $("<div>", {class: "relacionarColumna2"});
                             $.each(value.columna_2, function (keys, values) {
                                 var $div = $("<div>");
                                 $div.prop("key", keys);
-                                $div.prop("respuesta", null);
+                                $div.prop("current_col1", null);
                                 switch (value.tipo_columna_2) {
                                     case "texto":
                                     {
@@ -205,35 +234,51 @@
                                         }
                                     }
                                 }
-                                
-                                $div.click(function(){
-                                    if(selected===null){
+
+                                $div.click(function () {
+                                    if (selected === null) {
                                         return;
                                     }
-                                    
+
                                     var selectedKey = parseInt(selected.prop("key"));
                                     var cor = !isNaN(selectedKey) && (value.columna_2[$(this).prop("key")].respuesta === selectedKey);
                                     $(this).prop("correct", cor);
-                                    $(this).css("border", "3px solid "+selected.prop("color"));
-                                    
+                                    $(this).css("border", "3px solid " + selected.prop("color"));
+
+                                    if ($(this).prop("current_col1") !== null) {
+                                        var cur = $(this).prop("current_col1");
+                                        $(".relacionarContainer .relacionarColumna1 div").each(function () {
+                                            if ($(this).prop("key") == cur) {
+                                                $(this).css("border", "0px");
+                                            }
+                                        });
+                                    }
+
+                                    $(this).prop("current_col1", selectedKey);
                                     var correct = true;
-                                    $(".relacionarContainer .relacionarColumna2 div").each(function(){
-                                        if(!$(this).prop("correct")){
+                                    $(".relacionarContainer .relacionarColumna2 div").each(function () {
+                                        if (!$(this).prop("correct")) {
                                             correct = false;
                                             return false;
                                         }
                                     });
-                                    
+                                    var answered = true;
+                                    $(".relacionarContainer .relacionarColumna2 div").each(function () {
+                                        if ($(this).prop("current_col1") === null) {
+                                            answered = false;
+                                            return false;
+                                        }
+                                    });
+
                                     foo.preguntas[key].correct = correct;
-                                    foo.preguntas[key].answered = true;
-                                    console.log(correct); 
+                                    foo.preguntas[key].answered = answered;
                                     selected = null;
                                 });
-                                
+
                                 $columna_2.append($div);
                             });
                             $rContainer.append($columna_2);
-                            
+
                             $question_tab.append($rContainer);
                             break;
                         }
@@ -248,11 +293,6 @@
                         return;
                     }
 
-                    if (foo.preguntas[foo.current_question].correct) {
-                        alert("correcto");
-                    } else {
-                        alert("incorrecto");
-                    }
                     foo.current_question++;
                     var $button = $(this);
                     $button.prop("disabled", true)
@@ -262,13 +302,26 @@
                             $button.prop("disabled", false);
                         });
                     } else {
-                        var correctas = 0;
-                        $.each(foo.preguntas, function (key, value) {
-                            if (value.correct) {
-                                correctas++;
-                            }
+                        $(this).fadeOut(1000);
+                        $("div[id=tab_pregunta_" + (foo.current_question - 1) + "]").fadeOut(1000, function () {
+                            var puntaje = 0;
+                            var total = 0;
+                            $.each(foo.preguntas, function (key, value) {
+                                total += value.puntaje;
+                                if (value.correct) {
+                                    puntaje += value.puntaje;
+                                }
+                            });
+
+                            var objEvt = {
+                                type: "Retroalimentacion_Puntaje",
+                                container: $container,
+                                puntaje_obtenido: puntaje,
+                                total: total
+                            };
+                            
+                            $(document).trigger(objEvt);
                         });
-                        alert("Resultado: " + ((correctas / Object.keys(foo.preguntas).length) * 100) + "%");
                     }
                 });
                 $btn.html("Enviar Respuesta");
@@ -318,7 +371,7 @@ function equalsArrays(a, b) {
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
-    for (var i = 0; i < 6; i++ ) {
+    for (var i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;

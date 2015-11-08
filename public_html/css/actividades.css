@@ -16,6 +16,14 @@ span.numeracion{
     font-weight: bold;
 }
 
+div[id^=tab_pregunta]{
+    padding-bottom: 5px;
+}
+
+#prueba{
+    padding-bottom: 20px;
+}
+
 /*------------------------------ RELACIONAR --------------------------------------*/
 
 .relacionarContainer{
