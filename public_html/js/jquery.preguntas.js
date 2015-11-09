@@ -37,25 +37,26 @@
                         case "pick_many":
                         {
                             var contador = 0;
-                            foo.preguntas[key].tipo = "one";
-                            $.each(value.picks, function (keys, values) {
-                                if (values.correct) {
-                                    contador++;
-                                    if (contador > 1) {
-                                        foo.preguntas[key].tipo = "many";
-                                        return false;
-                                    }
-                                }
-                            });
+
+                            if (value.respuesta.length > 1) {
+                                foo.preguntas[key].tipo = "many";
+                            } else {
+                                foo.preguntas[key].tipo = "one";
+                            }
 
                             $.each(value.picks, function (keys, values) {
                                 var $input;
-                                if (!values.hasOwnProperty("correct")) {
-                                    values.correct = false;
-                                }
                                 if (foo.preguntas[key].tipo === "many") {
                                     $input = $("<input>", {"type": "checkbox", "name": "pregunta_" + key + "_" + keys, "option_number": keys});
-                                    $input.prop("correct", values.correct);
+
+                                    if (value.respuesta.indexOf(parseInt(keys)) >= 0)
+                                    {
+                                        $input.prop("correct", true);
+                                    }
+                                    else {
+                                        $input.prop("correct", false);
+                                    }
+
                                     $input.click(function () {
                                         var correcto = true;
                                         $("input[name^=pregunta_" + key + "]").each(function () {
@@ -69,14 +70,22 @@
                                     });
                                 } else {
                                     $input = $("<input>", {"type": "radio", "name": "pregunta_" + key, "option_number": keys});
-                                    $input.prop("correct", values.correct);
+
+                                    if (value.respuesta.indexOf(parseInt(keys)) >= 0)
+                                    {
+                                        $input.prop("correct", true);
+                                    }
+                                    else {
+                                        $input.prop("correct", false);
+                                    }
+
                                     $input.click(function () {
                                         foo.preguntas[key].correct = $(this).is(':checked') && $(this).prop("correct");
                                         foo.preguntas[key].answered = true;
                                     });
                                 }
 
-                                $p = $("<p>", {"class": "opcion_respuesta"}).html(values.tag);
+                                $p = $("<p>", {"class": "opcion_respuesta"}).html(createElement(value.tipo_elementos, values.contenido, keys));
                                 $p.prepend($input);
                                 $question_tab.append($p);
                             });
@@ -87,21 +96,21 @@
 
                         case "sortable":
                         {
-                            var contador = 0;
+                            foo.preguntas[key].answered = true;
                             var $ul = $("<ul>", {class: "listaSortable"});
                             $.each(value.elementos, function (keys, values) {
-                                var $li = $("<li>", {id: keys});
-                                $li.html(values.tag);
+                                var $li = $("<li>");
+                                $li.prop("key", keys);
+                                $li.html(createElement(value.tipo_elementos, values.contenido, keys));
                                 $ul.append($li);
                             });
 
                             $ul.sortable({stop: function () {
                                     var curArray = []
                                     $("li", $ul).each(function () {
-                                        curArray.push(parseInt($(this).attr("id")));
+                                        curArray.push(parseInt($(this).prop("key")));
                                     });
                                     foo.preguntas[key].correct = equalsArrays(curArray, value.orden);
-                                    foo.preguntas[key].answered = true;
                                 }});
                             $question_tab.append($ul);
                             break;
@@ -121,7 +130,7 @@
                             if (Object.keys(value.respuestas).length !== $("input", $p).length) {
                                 console.log("ERROR: La cantidad de espacios en el párrafo y respuestas en la configuración no concuerdan");
                             }
-                            
+
                             $.each(value.respuestas, function (keys, values) {
                                 var $next = $("input[initialized='false']", $p).first();
                                 $next.attr("size", 10);
@@ -130,7 +139,7 @@
                                     $next.prop("key", keys);
                                 }
                             });
-                            
+
                             $("input", $p).change(function () {
                                 var correct = true;
                                 $("input", $p).each(function () {
@@ -147,10 +156,10 @@
                                         }
                                     }
                                 });
-                                
+
                                 var answered = true;
-                                $(".parrafoCompletar input[type=text]").each(function(){
-                                    if($(this).val().trim().length===0){
+                                $(".parrafoCompletar input[type=text]").each(function () {
+                                    if ($(this).val().trim().length === 0) {
                                         answered = false;
                                         return false;
                                     }
@@ -179,20 +188,15 @@
                             $.each(value.columna_1, function (keys, values) {
                                 var $div = $("<div>");
                                 $div.prop("key", keys);
-                                switch (value.tipo_columna_1) {
-                                    case "texto":
-                                    {
-                                        if (values.hasOwnProperty("contenido")) {
-                                            var $span = $("<span>").html(values.contenido);
-                                            $div.html($span);
-                                        }
-                                        else {
-                                            console.log("El contenido de un drag no ha sido definido correctamente.");
-                                        }
-                                    }
-                                }
+                                $div.html(createElement(value.tipo_columna_1, values.contenido, keys));
 
                                 $div.click(function () {
+                                    
+                                    if(selected!=null){
+                                        selected.css("border", "0px");
+                                        selected = null;
+                                    }
+                                    
                                     selected = $(this);
                                     var color = getRandomColor();
                                     $(this).prop("color", color);
@@ -222,19 +226,7 @@
                                 var $div = $("<div>");
                                 $div.prop("key", keys);
                                 $div.prop("current_col1", null);
-                                switch (value.tipo_columna_2) {
-                                    case "texto":
-                                    {
-                                        if (values.hasOwnProperty("contenido")) {
-                                            var $span = $("<span>").html(values.contenido);
-                                            $div.html($span);
-                                        }
-                                        else {
-                                            console.log("El contenido de un drag no ha sido definido correctamente.");
-                                        }
-                                    }
-                                }
-
+                                $div.html(createElement(value.tipo_columna_2, values.contenido, keys));
                                 $div.click(function () {
                                     if (selected === null) {
                                         return;
@@ -293,6 +285,11 @@
                         return;
                     }
 
+                    $(".audiobtn").each(function () {
+                        $(this).prop("audio")[0].pause();
+                        $(this).prop("audio")[0].currentTime = 0;
+                    });
+
                     foo.current_question++;
                     var $button = $(this);
                     $button.prop("disabled", true)
@@ -319,7 +316,7 @@
                                 puntaje_obtenido: puntaje,
                                 total: total
                             };
-                            
+
                             $(document).trigger(objEvt);
                         });
                     }
@@ -375,4 +372,56 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+
+function createElement(tipo, contenido, key) {
+    var $ele_drag;
+    switch (tipo) {
+        case "texto":
+        {
+            $ele_drag = $("<span>").html(contenido);
+            break;
+        }
+        case "imagen":
+        {
+            $ele_drag = $("<img>", {src: contenido});
+            break;
+        }
+        case "audio":
+        {
+            var $audio = $("<audio>", {src: contenido});
+            $ele_drag = $("<div>", {class: "audiobtn"}).html("<i class='fa fa-play'></i>");
+            $ele_drag.prop("audio", $audio);
+            $ele_drag.prop("key", key);
+            $ele_drag.click(function () {
+                var theaudio = $(this).prop("audio")[0];
+                if (!theaudio.paused && !theaudio.ended && 0 < theaudio.currentTime) {
+                    theaudio.pause();
+                    theaudio.currentTime = 0;
+                } else {
+                    $(".audiobtn").each(function () {
+                        if ($(this).prop("key") !== key) {
+                            $(this).prop("audio")[0].pause();
+                            $(this).prop("audio")[0].currentTime = 0;
+                        }
+                    });
+                    $ele_drag.prop("audio")[0].play();
+                }
+            });
+
+            $audio.on("playing", function () {
+                $ele_drag.html("<i class='fa fa-stop'></i>");
+            });
+
+            $audio.on("ended", function () {
+                $ele_drag.html("<i class='fa fa-play'></i>");
+            });
+
+            $audio.on("pause", function () {
+                $ele_drag.html("<i class='fa fa-play'></i>");
+            });
+            break;
+        }
+    }
+    return $ele_drag;
 }

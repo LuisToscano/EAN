@@ -7,63 +7,64 @@
 
 $("document").ready(function () { 
     $("#prueba").generarPreguntas({
-        cantidad_preguntas: 4,
+        cantidad_preguntas: 5,
         preguntas: [
             {
                 tipo: "pick_many",
                 pregunta: "Ejemplo de única respuesta",
-                tipo_elementos: "texto",
+                tipo_elementos: "audio",
+                respuesta: [3],
                 picks: {
                     1: {
-                        tag: "Incorrecto"
+                        contenido: "media/organo.mp3"
                     },
                     2: {
-                        tag: "Incorrecto"
+                        contenido: "media/organo.mp3"
                     },
                     3: {
-                        tag: "Correcto",
-                        correct: true
+                        contenido: "media/organo.mp3"
                     },
                     4: {
-                        tag: "Incorrecto"
+                        contenido: "media/organo.mp3"
                     }
                 }
             },
             {
                 tipo: "pick_many",
                 pregunta: "Ejemplo de múltiple respuesta",
+                tipo_elementos: "texto",
+                respuesta: [1,3],
                 picks: {
                     1: {
-                        tag: "Correcto",
-                        correct: true
+                        contenido: "Correcto"
                     },
                     2: {
-                        tag: "Incorrecto"
+                        contenido: "Incorrecto"
                     },
                     3: {
-                        tag: "Correcto",
-                        correct: true
+                        contenido: "Correcto"
                     },
                     4: {
-                        tag: "Incorrecto"
+                        contenido: "Incorrecto"
                     }
                 }
             },
             {
                 tipo: "sortable",
                 pregunta: "Ordene la lista",
+                tipo_elementos: "audio",
                 elementos: {
                     1: {
-                        tag: "Tercer elemento"
+                        contenido: "media/organo.mp3"
                     },
                     2: {
-                        tag: "Cuarto elemento"
+                        contenido: "media/organo.mp3"
                     },
                     3: {
-                        tag: "Primer elemento"
+                        contenido: "media/organo.mp3"
                     },
                     4: {
-                        tag: "Segundo elemento"
+                        contenido: "media/organo.mp3"
                     }
                 },
                 orden: [3, 4, 1, 2]
@@ -83,37 +84,37 @@ $("document").ready(function () {
             {
                 tipo: "relacionar",
                 pregunta: "Relaciona mediante el clic los elementos de ambas columnas",
-                tipo_columna_1: "texto",
-                tipo_columna_2: "texto",
+                tipo_columna_1: "audio",
+                tipo_columna_2: "imagen",
                 columna_1: {
                     1: {
-                        contenido: "Texto 1"
+                        contenido: "media/organo.mp3"
                     },
                     2: {
-                        contenido: "Texto 2"
+                        contenido: "media/organo.mp3"
                     },
                     3: {
-                        contenido: "Texto 3"
+                        contenido: "media/organo.mp3"
                     },
                     4: {
-                        contenido: "Texto 4"
+                        contenido: "media/organo.mp3"
                     }
                 },
                 columna_2: {
                     1: {
-                        contenido: "Relaciona con Texto 2",
+                        contenido: "img/boy.jpg",
                         respuesta: 2
                     },
                     2: {
-                        contenido: "Relaciona con Texto 3",
+                        contenido: "img/boy.jpg",
                         respuesta: 3
                     },
                     3: {
-                        contenido: "Relaciona con Texto 1",
+                        contenido: "img/boy.jpg",
                         respuesta: 1
                     },
                     4: {
-                        contenido: "Relaciona con Texto 4",
+                        contenido: "img/boy.jpg",
                         respuesta: 4
                     }
                 }
@@ -194,6 +195,10 @@ $(document).on("Retroalimentacion_DragAndDrop", function(evt){
         }
     }
 });*/
+    
+    $(document).on("Retroalimentacion_Puntaje", function(evt){
+        alert((evt.puntaje_obtenido/evt.total)*100+"%");
+    });
     
     
 });

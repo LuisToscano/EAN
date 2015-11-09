@@ -24,6 +24,19 @@ div[id^=tab_pregunta]{
     padding-bottom: 20px;
 }
 
+div.audiobtn{
+    padding: 5px;
+    border-radius: 25%;
+    background-color: cornflowerblue;
+    color: white;
+    width: 30px;
+    text-align: center;
+}
+
+div.audiobtn:hover{
+    cursor: pointer;
+}
+
 /*------------------------------ RELACIONAR --------------------------------------*/
 
 .relacionarContainer{
@@ -35,7 +48,7 @@ div[id^=tab_pregunta]{
     width: 150px;
 }
 
-.relacionarContainer .relacionarColumna1 div, .relacionarContainer .relacionarColumna2 div{
+.relacionarContainer .relacionarColumna1 div:not(.audiobtn), .relacionarContainer .relacionarColumna2 div:not(.audiobtn){
     margin: 5px;
     padding: 5px;
     background-color: lightgray; 
@@ -45,6 +58,34 @@ div[id^=tab_pregunta]{
     max-width: 100px;
 }
 
+.relacionarContainer .relacionarColumna1 div img, .relacionarContainer .relacionarColumna2 div img{
+    width: 100px;
+    height: 100px;
+}
+
 .relacionarContainer .relacionarColumna1 div:hover, .relacionarContainer .relacionarColumna2 div:hover{
     cursor: pointer;
+}
+
+/*------------------------------ PICK MANY --------------------------------------*/
+
+p.opcion_respuesta{
+    display: flex;
+    flex-direction: row;
+}
+
+p.opcion_respuesta img{
+    width: 100px;
+    height: 100px;
+}
+
+/*------------------------------ SORTABLE --------------------------------------*/
+
+.listaSortable li{
+    margin-bottom: 5px;
+}
+
+.listaSortable li img{
+    width: 100px;
+    height: 100px;
 }
