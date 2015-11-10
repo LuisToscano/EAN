@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-
+/*
 $("document").ready(function () { 
     $("#prueba").generarPreguntas({
         cantidad_preguntas: 5,
@@ -122,7 +122,7 @@ $("document").ready(function () {
         ]
     });
     
-     /* $("#prueba").dragAndDrop({
+      $("#prueba").dragAndDrop({
         tipologia: "sencillo",
         pregunta: "Arrastre cada elemento sobre el elemento correcto",
         tipo_drags: "audio",
@@ -194,13 +194,23 @@ $(document).on("Retroalimentacion_DragAndDrop", function(evt){
             alert("respuesta incorrecta");
         }
     }
-});*/
-    
-    $(document).on("Retroalimentacion_Puntaje", function(evt){
+});
+ $(document).on("Retroalimentacion_Puntaje", function(evt){
         alert((evt.puntaje_obtenido/evt.total)*100+"%");
     });
-    
-    
 });
+ 
+ **/
+
+$(document).ready(function(){
+   $("#prueba").ahorcado({
+        palabras : ["perro", "gato", "casa", "guitarra", "espada"],
+        cantidad_palabras: 3,
+        oportunidades_palabra: 3,
+        vidas: 2
+    }); 
+});
+    
+    
 
 
