@@ -8,38 +8,185 @@ and open the template in the editor.
     Author     : End User
 */
 
-div[id^="tab_palabra"] {
+body{
+    background-color: #eee;
+}
+
+#prueba{
+    width: 940px;
+    margin: 0 auto;
+}
+
+.blackout{
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0,0,0,0.95);
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+.blackout .instruccion{
+    width: 25%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 20px;
     display: none;
 }
 
+.blackout .instruccion .rowInstruccion{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.blackout .instruccion .rowInstruccion .iconContainer{
+    padding: 8px 10px 8px 10px;
+    background-color: black;
+    border-radius: 100%;
+    color: white;
+    font-size: 15pt;
+}
+
+.blackout .instruccion .rowInstruccion .iconContainer:hover{
+    cursor: pointer;
+}
+
+.blackout .instruccion h2{
+    margin: 0px;
+}
+
+.blackout .instruccion p{
+    
+}
+
+
+.blackout .retroalimentacion{
+    display: none;
+    width: 25%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 20px;
+}
+
+.blackout .retroalimentacion h2{
+
+}
+
+.blackout .retroalimentacion p{
+
+}
+
+.blackout .retroalimentacion.otro_intento .buttonContainer{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+}
+
+.blackout .retroalimentacion.otro_intento button{
+        width: 50%;
+        padding: 20px;
+        font-size: 12pt;
+        border-radius: 15px;
+        border: 1px solid lightgray;
+}
+
+div[id^="tab_palabra"] {
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.fondoAhorcado{
+    position: relative;
+    width: 100%;
+    height: auto;
+    background-color: white;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    z-index: 2;
+}
+
+.fondoAhorcado img{
+    
+}
+
+.wordContainer{
+    background-color: rgba(0, 255, 69, 0.28);
+    padding: 5px;
+}
+
 .wordContainer input[type=text]{
-    border: 1px solid black;
+    border: 0px;
+    border-bottom: 1px solid gray;
     margin-bottom: 5px;
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
     text-align: center;
     font-size: 20pt;
+    margin-right: 5px;
+    background-color: transparent;
+}
+
+.wordContainer input[type=text]:focus{
+    outline: 0;
 }
 
 .letrasContainer{
     display:flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .letrasContainer .letra{
-   background-color: lightgray;
    padding: 5px;
    margin: 3px;
-   width: 20px;
+   flex: 1;
    height: 20px;
    text-align: center;
+   border-radius: 15%;
+   border: 1px solid lightgray;
+   background-color: white;
+   text-transform: lowercase;
+   min-height: 50px; 
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   text-align: center;
+   font-size: 15pt;
+}
+
+.letrasContainer .letra p{
+   margin: 0 auto;
 }
 
 .letrasContainer .letra:hover{
     cursor: pointer;
 }
 
-.letrasContainer .letra.selected{
-   background-color: gray;
+.letrasContainer .letra.correct{
+   background-color: darkgreen;
    color: white;
+}
+
+.letrasContainer .letra.incorrect{
+   background-color: darkred;
+   color: white;
+}
+
+.intentosAhorcado{
+    margin-top: 15px;
+    text-transform: capitalize;
+}
+
+.intentosAhorcado span{
+    font-weight: bold;
 }

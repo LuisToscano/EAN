@@ -10,6 +10,8 @@
 (function ($) {
     $.fn.extend({
         ahorcado: function (config) {
+            var cssLink = $("<link rel='stylesheet' href='icons/css/font-awesome.min.css'>");
+            $("head").append(cssLink);
             var $container = $(this);
             var shuffled = shuffle(config.palabras);
             $container.prop("info", {palabras: [], palabras_restantes: [], current_word: 0, oportunidades: config.oportunidades_palabra, vidas: config.vidas});
@@ -18,6 +20,9 @@
             foo.palabras_restantes = shuffled.slice(config.cantidad_palabras, shuffled.length);
 
             var cont = 0;
+
+            var $background = $("<div>", {class: "fondoAhorcado"});
+            $background.append($("<img>", {src: getCurrentImage(config.imagenes, foo.oportunidades)}));
             $.each(foo.palabras, function (key, value) {
                 var $word_tab = $("<div>", {id: "tab_palabra_" + cont});
                 cont++;
@@ -31,106 +36,141 @@
                     $wordContainer.append($input);
                 }
                 $word_tab.append($wordContainer);
-                $container.append($word_tab);
+                $background.append($word_tab);
             });
 
+            $container.append($background);
             var $letrasContainer = $("<div>", {class: "letrasContainer"});
-            $letrasContainer.append($("<div>", {class: "letra"}).html("A"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("B"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("C"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("D"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("E"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("F"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("G"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>A</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>B</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>C</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>D</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>E</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>F</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>G</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>H</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>I</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>J</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>K</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>L</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>M</p>"));
             $container.append($letrasContainer);
 
             $letrasContainer = $("<div>", {class: "letrasContainer"});
-            $letrasContainer.append($("<div>", {class: "letra"}).html("H"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("I"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("J"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("K"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("L"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("M"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("N"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>N</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>O</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>P</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>Q</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>R</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>S</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>T</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>U</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>V</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>W</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>X</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>Y</p>"));
+            $letrasContainer.append($("<div>", {class: "letra"}).html("<p>Z</p>"));
             $container.append($letrasContainer);
 
             $letrasContainer = $("<div>", {class: "letrasContainer"});
-            $letrasContainer.append($("<div>", {class: "letra"}).html("O"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("P"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("Q"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("R"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("S"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("T"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("U"));
+
             $container.append($letrasContainer);
 
-            $letrasContainer = $("<div>", {class: "letrasContainer"});
-            $letrasContainer.append($("<div>", {class: "letra"}).html("V"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("W"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("X"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("Y"));
-            $letrasContainer.append($("<div>", {class: "letra"}).html("Z"));
-            $container.append($letrasContainer);
-
-            var $intentosContainer = $("<div>", {class: "intentosAhorcado"}).html("oportunidades restantes: " + foo.oportunidades);
+            var $intentosContainer = $("<div>", {class: "intentosAhorcado"}).html("<span>oportunidades restantes:</span>" + foo.oportunidades);
             $container.append($intentosContainer);
 
             $(".letrasContainer div.letra").click(function () {
-                if ($(this).hasClass("selected")) {
+                if ($(this).hasClass("correct") || $(this).hasClass("incorrect")) {
                     return;
                 }
-                var val = $(this).html().toLowerCase();
+                var val = $("p", $(this)).html().toLowerCase();
                 var cont = 0, cont2 = 0;
-                
-                var $curTab = $("#tab_palabra_"+foo.current_word);
+
+                var $curTab = $("#tab_palabra_" + foo.current_word);
                 $(".wordContainer input", $curTab).each(function () {
+                    console.log($(this).prop("letra").toLowerCase() + "===" + val);
                     if ($(this).prop("letra").toLowerCase() === val) {
                         $(this).val(val.toUpperCase());
                         cont++;
                     }
-                    
-                    if($(this).val().trim().length>0){
+
+                    if ($(this).val().trim().length > 0) {
                         cont2++;
                     }
                 });
-                $(this).addClass("selected");
 
                 if (cont === 0) {
-                    alert("error");
+                    $(this).addClass("incorrect");
                     foo.oportunidades--;
+                    var newimg = getCurrentImage(config.imagenes, foo.oportunidades);
+                    if (newimg.length > 0) {
+                        $("img", $("div.fondoAhorcado")).attr("src", newimg);
+                    }
                     if (foo.oportunidades >= 0) {
-                        $("div.intentosAhorcado", $container).html("oportunidades restantes: " + foo.oportunidades);
+                        $("div.intentosAhorcado", $container).html("<span>oportunidades restantes:</span>  " + foo.oportunidades);
                         if (foo.oportunidades === 0) {
                             foo.vidas--;
+
+                            var objEvt = {
+                                type: "Retroalimentacion_Ahorcado",
+                                container: $container,
+                                correct: false,
+                                intentos_restantes: foo.vidas
+                            };
+                            $(document).trigger(objEvt);
+
                             if (foo.vidas > 0) {
-                                alert("Te quedan " + foo.vidas + " intentos");
+                                $(".wordContainer input", $curTab).val("");
+                                $(".letrasContainer div.letra").removeClass("correct");
+                                $(".letrasContainer div.letra").removeClass("incorrect");
+                                foo.oportunidades = config.oportunidades_palabra;
+                                $("div.intentosAhorcado", $container).html("<span>oportunidades restantes:</span> " + foo.oportunidades);
+                                var newimg = getCurrentImage(config.imagenes, foo.oportunidades);
+                                if (newimg.length > 0) {
+                                    $("img", $("div.fondoAhorcado")).attr("src", newimg);
+                                }
                             } else {
-                                alert("has perdido");
+                                $("#tab_palabra_" + (foo.current_word)).fadeOut(500);
+                                $(".letrasContainer div.letra").off();
                             }
                         }
                     }
                 }
-                else{
-                    if(cont2 === $(".wordContainer input", $curTab).length){
-                        alert("correcto");
+                else {
+                    $(this).addClass("correct");
+                    if (cont2 === $(".wordContainer input", $curTab).length) {
                         foo.current_word++;
-                        if(foo.current_word < foo.palabras.length){
-                            $("#tab_palabra_"+(foo.current_word-1)).fadeOut(500, function(){
-                                $("#tab_palabra_"+(foo.current_word)).fadeIn(500);
-                                $(".letrasContainer .letra", $container).removeClass("selected");
+                        if (foo.current_word < foo.palabras.length) {
+                            $("#tab_palabra_" + (foo.current_word - 1)).fadeOut(500, function () {
+                                $("#tab_palabra_" + (foo.current_word)).fadeIn(500);
+                                $(".letrasContainer .letra", $container).removeClass("incorrect");
+                                $(".letrasContainer .letra", $container).removeClass("correct");
                                 foo.oportunidades = config.oportunidades_palabra;
-                                $("div.intentosAhorcado", $container).html("oportunidades restantes: " + foo.oportunidades);
+                                $("div.intentosAhorcado", $container).html("<span>oportunidades restantes:</span> " + foo.oportunidades);
+                                var newimg = getCurrentImage(config.imagenes, foo.oportunidades);
+                                if (newimg.length > 0) {
+                                    $("img", $("div.fondoAhorcado")).attr("src", newimg);
+                                }
                             });
-                        }else{
-                            alert("se acabó esta vaina");
+                        } else {
+                            var objEvt = {
+                                type: "Retroalimentacion_Ahorcado",
+                                container: $container,
+                                correct: true
+                            };
+                            $(document).trigger(objEvt);
                         }
                     }
                 }
             });
 
-            $("#tab_palabra_0").show();
+            var objEvt = {
+                type: "Inicio_Ahorcado"
+            };
+            $(document).trigger(objEvt);
         }
     });
+
 })(jQuery);
 
 function shuffle(array) {
@@ -150,4 +190,16 @@ function shuffle(array) {
     }
 
     return array;
+}
+
+function getCurrentImage(imagenes, intentos) {
+    var url = "";
+
+    $.each(imagenes, function (key, value) {
+        if (value.intentos_restantes === intentos) {
+            url = value.url;
+        }
+    });
+
+    return url;
 }

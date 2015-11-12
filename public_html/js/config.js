@@ -5,212 +5,278 @@
  */
 
 /*
-$("document").ready(function () { 
-    $("#prueba").generarPreguntas({
-        cantidad_preguntas: 5,
-        preguntas: [
-            {
-                tipo: "pick_many",
-                pregunta: "Ejemplo de única respuesta",
-                tipo_elementos: "audio",
-                respuesta: [3],
-                picks: {
-                    1: {
-                        contenido: "media/organo.mp3"
-                    },
-                    2: {
-                        contenido: "media/organo.mp3"
-                    },
-                    3: {
-                        contenido: "media/organo.mp3"
-                    },
-                    4: {
-                        contenido: "media/organo.mp3"
-                    }
-                }
-            },
-            {
-                tipo: "pick_many",
-                pregunta: "Ejemplo de múltiple respuesta",
-                tipo_elementos: "texto",
-                respuesta: [1,3],
-                picks: {
-                    1: {
-                        contenido: "Correcto"
-                    },
-                    2: {
-                        contenido: "Incorrecto"
-                    },
-                    3: {
-                        contenido: "Correcto"
-                    },
-                    4: {
-                        contenido: "Incorrecto"
-                    }
-                }
-            },
-            {
-                tipo: "sortable",
-                pregunta: "Ordene la lista",
-                tipo_elementos: "audio",
-                elementos: {
-                    1: {
-                        contenido: "media/organo.mp3"
-                    },
-                    2: {
-                        contenido: "media/organo.mp3"
-                    },
-                    3: {
-                        contenido: "media/organo.mp3"
-                    },
-                    4: {
-                        contenido: "media/organo.mp3"
-                    }
-                },
-                orden: [3, 4, 1, 2]
-            }
-            ,
-            {
-                tipo: "completar",
-                pregunta: "Complete los espacios en blanco",
-                parrafo: "Los colores de la bandera de Colombia son <espacio>, <espacio> y <espacio>",
-                ignore_caps: true,
-                respuestas: {
-                    1: "amarillo",
-                    2: "azul",
-                    3: "rojo"
-                }
-            },
-            {
-                tipo: "relacionar",
-                pregunta: "Relaciona mediante el clic los elementos de ambas columnas",
-                tipo_columna_1: "audio",
-                tipo_columna_2: "imagen",
-                columna_1: {
-                    1: {
-                        contenido: "media/organo.mp3"
-                    },
-                    2: {
-                        contenido: "media/organo.mp3"
-                    },
-                    3: {
-                        contenido: "media/organo.mp3"
-                    },
-                    4: {
-                        contenido: "media/organo.mp3"
-                    }
-                },
-                columna_2: {
-                    1: {
-                        contenido: "img/boy.jpg",
-                        respuesta: 2
-                    },
-                    2: {
-                        contenido: "img/boy.jpg",
-                        respuesta: 3
-                    },
-                    3: {
-                        contenido: "img/boy.jpg",
-                        respuesta: 1
-                    },
-                    4: {
-                        contenido: "img/boy.jpg",
-                        respuesta: 4
-                    }
-                }
-            }
-        ]
-    });
-    
-      $("#prueba").dragAndDrop({
-        tipologia: "sencillo",
-        pregunta: "Arrastre cada elemento sobre el elemento correcto",
-        tipo_drags: "audio",
-        tipo_drops: "texto", 
-        intentos: 2,
-        drags: {
-            "1": {
-                contenido: "media/dog.mp3"
-            },
-            "2": {
-                contenido: "media/organo.mp3"
-            }
-        },
-        drops: {
-            "1": {
-                contenido: "Órgano",
-                accepted: ["2"]
-            },
-            "2": {
-                contenido: "Perro",
-                accepted: ["1"]
-            }
-        }
-    });
-
-    $("#prueba2").dragAndDrop({
-        tipologia: "categoria",
-        pregunta: "Arrastre los elementos sobre la categoría correcta",
-        tipo_drags: "audio",
-        tipo_drops: "imagen",
-        intentos: 2,
-        drags: {
-            1: {
-                contenido: "media/dog.mp3"
-            },
-            2: {
-                contenido: "media/organo.mp3"
-            }
-            ,
-            3: {
-                contenido: "media/organo.mp3"
-            }
-        },
-        drops: {
-            "1": {
-                contenido: "img/boy.jpg",
-                accepted: ["3", "2"]
-            },
-            "2": {
-                contenido: "img/girl.jpg",
-                accepted: ["1"]
-            }
-        }
-    });
-});
-
-$(document).on("Retroalimentacion_DragAndDrop", function(evt){
-    if(evt.correct){
-        //retroalimentación correcto
-        alert("respuesta correcta");
-    }else{
-        console.log(evt.intentos_restantes);
-        if(evt.intentos_restantes > 0){
-            //retroalimentación volver a intentarlo (aun quedan intentos)
-            alert("Tiene "+evt.intentos_restantes+ " intentos restantes.");
-        }
-        else{
-           //retroalimentación incorrecto 
-            alert("respuesta incorrecta");
-        }
-    }
-});
+ $("document").ready(function () { 
+ $("#prueba").generarPreguntas({
+ cantidad_preguntas: 5,
+ preguntas: [
+ {
+ tipo: "pick_many",
+ pregunta: "Ejemplo de única respuesta",
+ tipo_elementos: "audio",
+ respuesta: [3],
+ picks: {
+ 1: {
+ contenido: "media/organo.mp3"
+ },
+ 2: {
+ contenido: "media/organo.mp3"
+ },
+ 3: {
+ contenido: "media/organo.mp3"
+ },
+ 4: {
+ contenido: "media/organo.mp3"
+ }
+ }
+ },
+ {
+ tipo: "pick_many",
+ pregunta: "Ejemplo de múltiple respuesta",
+ tipo_elementos: "texto",
+ respuesta: [1,3],
+ picks: {
+ 1: {
+ contenido: "Correcto"
+ },
+ 2: {
+ contenido: "Incorrecto"
+ },
+ 3: {
+ contenido: "Correcto"
+ },
+ 4: {
+ contenido: "Incorrecto"
+ }
+ }
+ },
+ {
+ tipo: "sortable",
+ pregunta: "Ordene la lista",
+ tipo_elementos: "audio",
+ elementos: {
+ 1: {
+ contenido: "media/organo.mp3"
+ },
+ 2: {
+ contenido: "media/organo.mp3"
+ },
+ 3: {
+ contenido: "media/organo.mp3"
+ },
+ 4: {
+ contenido: "media/organo.mp3"
+ }
+ },
+ orden: [3, 4, 1, 2]
+ }
+ ,
+ {
+ tipo: "completar",
+ pregunta: "Complete los espacios en blanco",
+ parrafo: "Los colores de la bandera de Colombia son <espacio>, <espacio> y <espacio>",
+ ignore_caps: true,
+ respuestas: {
+ 1: "amarillo",
+ 2: "azul",
+ 3: "rojo"
+ }
+ },
+ {
+ tipo: "relacionar",
+ pregunta: "Relaciona mediante el clic los elementos de ambas columnas",
+ tipo_columna_1: "audio",
+ tipo_columna_2: "imagen",
+ columna_1: {
+ 1: {
+ contenido: "media/organo.mp3"
+ },
+ 2: {
+ contenido: "media/organo.mp3"
+ },
+ 3: {
+ contenido: "media/organo.mp3"
+ },
+ 4: {
+ contenido: "media/organo.mp3"
+ }
+ },
+ columna_2: {
+ 1: {
+ contenido: "img/boy.jpg",
+ respuesta: 2
+ },
+ 2: {
+ contenido: "img/boy.jpg",
+ respuesta: 3
+ },
+ 3: {
+ contenido: "img/boy.jpg",
+ respuesta: 1
+ },
+ 4: {
+ contenido: "img/boy.jpg",
+ respuesta: 4
+ }
+ }
+ }
+ ]
+ });
+ 
+ $("#prueba").dragAndDrop({
+ tipologia: "sencillo",
+ pregunta: "Arrastre cada elemento sobre el elemento correcto",
+ tipo_drags: "audio",
+ tipo_drops: "texto", 
+ intentos: 2,
+ drags: {
+ "1": {
+ contenido: "media/dog.mp3"
+ },
+ "2": {
+ contenido: "media/organo.mp3"
+ }
+ },
+ drops: {
+ "1": {
+ contenido: "Órgano",
+ accepted: ["2"]
+ },
+ "2": {
+ contenido: "Perro",
+ accepted: ["1"]
+ }
+ }
+ });
+ 
+ $("#prueba2").dragAndDrop({
+ tipologia: "categoria",
+ pregunta: "Arrastre los elementos sobre la categoría correcta",
+ tipo_drags: "audio",
+ tipo_drops: "imagen",
+ intentos: 2,
+ drags: {
+ 1: {
+ contenido: "media/dog.mp3"
+ },
+ 2: {
+ contenido: "media/organo.mp3"
+ }
+ ,
+ 3: {
+ contenido: "media/organo.mp3"
+ }
+ },
+ drops: {
+ "1": {
+ contenido: "img/boy.jpg",
+ accepted: ["3", "2"]
+ },
+ "2": {
+ contenido: "img/girl.jpg",
+ accepted: ["1"]
+ }
+ }
+ });
+ });
+ 
+ $(document).on("Retroalimentacion_DragAndDrop", function(evt){
+ if(evt.correct){
+ //retroalimentación correcto
+ alert("respuesta correcta");
+ }else{
+ console.log(evt.intentos_restantes);
+ if(evt.intentos_restantes > 0){
+ //retroalimentación volver a intentarlo (aun quedan intentos)
+ alert("Tiene "+evt.intentos_restantes+ " intentos restantes.");
+ }
+ else{
+ //retroalimentación incorrecto 
+ alert("respuesta incorrecta");
+ }
+ }
+ });
  $(document).on("Retroalimentacion_Puntaje", function(evt){
-        alert((evt.puntaje_obtenido/evt.total)*100+"%");
-    });
-});
+ alert((evt.puntaje_obtenido/evt.total)*100+"%");
+ });
+ });
  
  **/
 
-$(document).ready(function(){
-   $("#prueba").ahorcado({
-        palabras : ["perro", "gato", "casa", "guitarra", "espada"],
+$(document).ready(function () {
+    $("#prueba").ahorcado({
+        palabras: ["perro", "gato", "casa", "guitarra", "espada"],
         cantidad_palabras: 3,
         oportunidades_palabra: 3,
-        vidas: 2
-    }); 
+        vidas: 2,
+        imagenes: {
+            1: {
+                url: "img/HangMan-07.svg",
+                intentos_restantes: 0
+            },
+            2: {
+                url: "img/HangMan-06.svg",
+                intentos_restantes: 1
+            },
+            3: {
+                url: "img/HangMan-05.svg",
+                intentos_restantes: 2
+            },
+            4: {
+                url: "img/HangMan-04.svg",
+                intentos_restantes: 3
+            }
+        }
+    });
 });
+
+$(document).on("Inicio_Ahorcado", function (evt) {
+    $(".blackout .instruccion").show();
     
+    $(".blackout").css('display', 'flex').hide().fadeIn(500, function () {
+        $("#tab_palabra_0").show();
+    });
+
+    $(".blackout").click(function () {
+        $(this).fadeOut(500);
+    });
     
+    $(".blackout .instruccion .iconContainer").click(function () {
+        $(".blackout").fadeOut(500);
+    });
+
+    $(".blackout .instruccion").click(function (event) {
+        event.stopPropagation();
+    });
+    
+    $(".blackout .retroalimentacion").click(function (event) {
+        event.stopPropagation();
+    });
+});
+
+$(document).on("Retroalimentacion_Ahorcado", function (evt) {
+    if (evt.correct) {
+        $(".blackout>div").hide();
+        $(".blackout .retroalimentacion.correcto").show();
+        $(".blackout").fadeIn(500);
+    } else {
+        if (evt.intentos_restantes > 0) {
+            $(".blackout>div").hide();
+            $(".blackout .retroalimentacion.otro_intento").show();
+            $(".blackout").fadeIn(500);
+            
+            $(".blackout .retroalimentacion.otro_intento button").click(function(){
+                $(".blackout").fadeOut(500);
+            });
+        }
+        else {
+            //retroalimentación incorrecto 
+            $(".blackout>div").hide();
+            $(".blackout .retroalimentacion.incorrecto").show();
+            $(".blackout").fadeIn(500);
+        }
+    }
+});
+
+
 
 
