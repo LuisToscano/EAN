@@ -204,9 +204,9 @@
 
 $(document).ready(function () {
     $("#prueba").ahorcado({
-        palabras: ["perro", "gato", "casa", "guitarra", "espada"],
+        palabras: ["perro sucio", "gato gordo", "casa limpia", "guitarra", "espada"],
         cantidad_palabras: 3,
-        oportunidades_palabra: 3,
+        oportunidades_palabra: 6,
         vidas: 2,
         imagenes: {
             1: {
@@ -224,17 +224,29 @@ $(document).ready(function () {
             4: {
                 url: "img/HangMan-04.svg",
                 intentos_restantes: 3
+            },
+            5: {
+                url: "img/HangMan-03.svg",
+                intentos_restantes: 4
+            },
+            6: {
+                url: "img/HangMan-02.svg",
+                intentos_restantes: 5
+            },
+            7: {
+                url: "img/HangMan-01.svg",
+                intentos_restantes: 6
             }
         }
     });
 });
 
 $(document).on("Inicio_Ahorcado", function (evt) {
-    $(".blackout .instruccion").show();
+    console.log("asdasd");
+    $(".blackout>div").hide();
+    $(".blackout .instruccion").fadeIn(500);
     
-    $(".blackout").css('display', 'flex').hide().fadeIn(500, function () {
-        $("#tab_palabra_0").show();
-    });
+    $(".blackout").css('display', 'flex').hide().fadeIn(500);
 
     $(".blackout").click(function () {
         $(this).fadeOut(500);
@@ -251,19 +263,19 @@ $(document).on("Inicio_Ahorcado", function (evt) {
     $(".blackout .retroalimentacion").click(function (event) {
         event.stopPropagation();
     });
+    
 });
 
 $(document).on("Retroalimentacion_Ahorcado", function (evt) {
     if (evt.correct) {
         $(".blackout>div").hide();
-        $(".blackout .retroalimentacion.correcto").show();
+        $(".blackout .retroalimentacion.correcto").fadeIn(500);
         $(".blackout").fadeIn(500);
     } else {
         if (evt.intentos_restantes > 0) {
             $(".blackout>div").hide();
             $(".blackout .retroalimentacion.otro_intento").show();
             $(".blackout").fadeIn(500);
-            
             $(".blackout .retroalimentacion.otro_intento button").click(function(){
                 $(".blackout").fadeOut(500);
             });
@@ -271,8 +283,12 @@ $(document).on("Retroalimentacion_Ahorcado", function (evt) {
         else {
             //retroalimentación incorrecto 
             $(".blackout>div").hide();
-            $(".blackout .retroalimentacion.incorrecto").show();
+            $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
             $(".blackout").fadeIn(500);
+            $(".blackout .retroalimentacion.incorrecto button").click(function(){
+                evt.container.reiniciar_ahorcado();
+                $(".blackout").fadeOut(500);
+            });
         }
     }
 });

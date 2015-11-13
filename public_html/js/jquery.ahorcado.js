@@ -14,6 +14,7 @@
             $("head").append(cssLink);
             var $container = $(this);
             var shuffled = shuffle(config.palabras);
+            $container.prop("config", config);
             $container.prop("info", {palabras: [], palabras_restantes: [], current_word: 0, oportunidades: config.oportunidades_palabra, vidas: config.vidas});
             var foo = $container.prop("info");
             foo.palabras = shuffled.slice(0, config.cantidad_palabras);
@@ -28,12 +29,17 @@
                 cont++;
                 var $wordContainer = $("<div>", {class: "wordContainer"});
                 for (var i = 0; i < value.length; i++) {
-                    var $input = $("<input>", {type: "text"});
-                    $input.attr("size", 1);
-                    $input.attr("maxlength", 1);
-                    $input.attr("readonly", true);
-                    $input.prop("letra", value.charAt(i));
-                    $wordContainer.append($input);
+                    if(value.charAt(i)!==" "){
+                        var $input = $("<input>", {type: "text"});
+                        $input.attr("size", 1);
+                        $input.attr("maxlength", 1);
+                        $input.attr("readonly", true);
+                        $input.prop("letra", value.charAt(i));
+                        $wordContainer.append($input);
+                    }else{
+                        var $separator = $("<div>", {class: "separator"});
+                        $wordContainer.append($separator);
+                    }
                 }
                 $word_tab.append($wordContainer);
                 $background.append($word_tab);
@@ -80,6 +86,12 @@
             $container.append($intentosContainer);
 
             $(".letrasContainer div.letra").click(function () {
+                var block = $(this).prop("blocked");
+                
+                if(block!==null && block){
+                    return;
+                }
+                
                 if ($(this).hasClass("correct") || $(this).hasClass("incorrect")) {
                     return;
                 }
@@ -88,7 +100,6 @@
 
                 var $curTab = $("#tab_palabra_" + foo.current_word);
                 $(".wordContainer input", $curTab).each(function () {
-                    console.log($(this).prop("letra").toLowerCase() + "===" + val);
                     if ($(this).prop("letra").toLowerCase() === val) {
                         $(this).val(val.toUpperCase());
                         cont++;
@@ -131,7 +142,10 @@
                                 }
                             } else {
                                 $("#tab_palabra_" + (foo.current_word)).fadeOut(500);
-                                $(".letrasContainer div.letra").off();
+                                
+                                $("div.letrasContainer .letra", $container).each(function(){
+                                   $(this).prop("blocked", true); 
+                                });
                             }
                         }
                     }
@@ -163,11 +177,28 @@
                     }
                 }
             });
-
-            var objEvt = {
-                type: "Inicio_Ahorcado"
-            };
-            $(document).trigger(objEvt);
+            
+            $("#tab_palabra_0").fadeIn(500);
+            if(!config.hasOwnProperty("reinicio")){
+                var objEvt = {
+                    type: "Inicio_Ahorcado"
+                };
+                $(document).trigger(objEvt);
+            }
+        },
+        reiniciar_ahorcado: function(){
+            var config = $(this).prop("config");
+            
+            $("div.letrasContainer .letra", $(this)).each(function(){
+               $(this).removeClass("correct");
+               $(this).removeClass("incorrect");
+            });
+            
+            if(config!==null && typeof config === "object"){
+                $(this).empty();
+                config.reinicio = true;
+                $(this).ahorcado(config);
+            }
         }
     });
 
