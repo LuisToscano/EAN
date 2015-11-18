@@ -8,30 +8,102 @@ and open the template in the editor.
     Author     : End User
 */
 
-div.dragContainer{
+div.dragDropBtnContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+button.dragDropButton{
+    border-radius: 15px;
+    width: 150px;
+    background-color: lightgray;
+    padding: 5px;
+    margin: 10px;
+}
+
+div.simpleDropElement img, div.categoryDropElement img{
+    max-width:100%;
+    max-height:100%;
+    height: 100%;
+    width: 100%;
+}
+
+/*------------------------------- SIMPLE -------------------------------------- */
+
+div.dragDropContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+div.simpleDropsContainer{
+    display:flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+div.simpleDragContainer{
     display:flex;
     flex-direction: row;
     margin: 5px;
+    flex: 1;
 }
 
-div.dropContainer{
+div.simpleDropsContainer div.dropContainer{
     display:flex;
     flex-direction: row;
+    background-color: lightgray;
+    margin: 5px;
+    padding: 10px;
+}
+
+div.simpleDropsContainer div.dropContainer div.eleDropContainer{
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+    flex: 3;
+}
+
+div.simpleDropsContainer div.dropContainer div.eleDropContainer span{
+    margin: 0 auto;
+}
+
+div.simpleDropsContainer div.dropContainer div.dropElement{
+    background-color: white;
+    border: 1px solid black;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 2;
+}
+
+div.simpleDragContainer div.dragCol{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 }
 
 div.dragElement{
-    margin: 5px;
-    display: inline-block;
+    margin: 5px auto;
 }
 
 div.dragElement:hover{
     cursor: pointer;
 }
 
-div.dragElement img{
-    width: 80px;
-    height: 80px;
+div.simpleDragContainer div.dragElement img{
+    width: 50px;
+    height: 50px;
     border: 1px solid black;
+}
+
+div.simpleDragContainer div.dragElement span{
+    background-color: green;
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
 }
 
 div.simpleDropElement{
@@ -44,6 +116,21 @@ div.simpleDropElement{
     align-items: center;
 }
 
+div.simpleDragContainer div.dragElement .audiobtn{
+    padding: 5px;
+    border-radius: 25%;
+    background-color: cornflowerblue;
+    color: white;
+    width: 30px;
+    text-align: center;
+}
+/*------------------------------- CATEGORY -------------------------------------- */
+
+div.dragDropContainer.category{
+    display: flex;
+    flex-direction: column;
+}
+
 div.categoryDropElement{
     border: 1px solid black;
     height: 400px;
@@ -54,33 +141,82 @@ div.categoryDropElement{
     align-items: center;
 }
 
-div.simpleDropElement img, div.categoryDropElement img{
-    max-width:100%;
-    max-height:100%;
-    height: 100%;
+div.categoryDropsContainer{
+    display:flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+div.categoryDropsContainer div.dropContainer{
+    display:flex;
+    flex-direction: column;
+    flex:1;
+    height: 250px;
+    margin: 10px;
+}
+
+div.categoryDropsContainer div.dropContainer .eleDropContainer{
+    background-color: #5a5a5a;
+    color: white;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    font-size: 20px;
+}
+
+div.categoryDropsContainer div.dropContainer .eleDropContainer span{
+    margin: 0 auto;
+}
+
+div.categoryDropsContainer div.dropContainer div.dropElement{
+    display: flex;
+    flex: 5;
+    box-shadow: inset 0px 0px 8px 1px rgba(0,0,0,0.4);
+    background-color: white;
+}
+
+div.categoryDragsContainer{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+div.categoryDragContainer{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+}
+
+
+div.categoryDragContainer div.dragElement {
+    text-align: center;
+    display: flex;
+    min-width: 150px;
+}
+
+div.categoryDragContainer div.dragElement span{
+    background-color: green;
+    border-radius: 10px;
+    padding: 15px;
     width: 100%;
 }
 
-div.categoryDropElement span{
-    display: block;
-    margin: 0 auto;
+div.categoryDragContainer div.dragElement img{
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
 }
 
-div.simpleDropElement span{
-    display: block;
-    margin: 0 auto;
-}
-
-div.audiobtn{
+div.categoryDragContainer div.dragElement .audiobtn{
     padding: 5px;
-    border-radius: 25%;
+    border-radius: 15%;
     background-color: cornflowerblue;
     color: white;
-    width: 30px;
+    width: 100px;
     text-align: center;
 }
 
-button.dragDropButton{
-    
-}
+
 

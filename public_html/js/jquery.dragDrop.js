@@ -22,7 +22,76 @@
                 switch (config.tipologia) {
                     case "sencillo":
                     {
-                        var $dragContainer = $("<div>", {class: "dragContainer"});
+                        var $dropsContainer = $("<div>", {class: "simpleDropsContainer"});
+                        $.each(config.drops, function (key, value) {
+                            foo.drops[key] = {};
+                            var $drop = $("<div>", {"class": "dropElement"});
+                            foo.drops[key].obj = $drop;
+                            foo.drops[key].current_drag = null;
+                            foo.drops[key].correct = false;
+                            $drop.droppable({
+                                drop: function (event, ui) {
+                                    var curDrag = foo.drops[key].current_drag;
+                                    var dragKey = $(ui.draggable).prop("key");
+                                    if (curDrag === null)
+                                    {
+                                        foo.drops[key].current_drag = dragKey;
+                                    }
+                                    else {
+                                        if (curDrag !== $(ui.draggable).prop("key")) {
+                                            moverDrag(foo.drags[curDrag].obj, foo.drags[curDrag].posicion);
+                                            foo.drops[key].current_drag = dragKey;
+                                        }
+                                    }
+                                    ui.draggable.position({
+                                        my: "center",
+                                        at: "center",
+                                        of: $(this)
+                                    });
+                                    foo.drops[key].correct = value.accepted.indexOf(parseInt(foo.drops[key].current_drag)) >= 0;
+                                },
+                                out: function (event, ui) {
+                                    var curDrag = foo.drops[key].current_drag;
+                                    if (curDrag !== null && ($(ui.draggable).prop("key") === foo.drops[key].current_drag)) {
+                                        foo.drops[key].current_drag = null;
+                                        foo.drops[key].correct = false;
+                                    }
+                                },
+                                tolerance: "pointer"
+                            });
+
+                            var $ele_drop;
+                            switch (config.tipo_drops) {
+                                case "texto":
+                                {
+                                    $ele_drop = $("<span>").html(value.contenido);
+                                    break;
+                                }
+                                case "imagen":
+                                {
+                                    $ele_drop = $("<img>", {src: value.contenido});
+                                    break;
+                                }
+                                case "default":
+                                {
+                                    console.error("El tipo de drop especificado no existe");
+                                    break;
+                                }
+                            }
+                            
+                            var $dropContainer = $("<div>", {class:"dropContainer"});
+                            var $eleDropContainer = $("<div>", {class:"eleDropContainer"});
+                            $eleDropContainer.append($ele_drop);
+                            $dropContainer.append($eleDropContainer);
+                            $dropContainer.append($drop);
+                            $dropsContainer.append($dropContainer);
+                        });
+                        
+                        var $dragContainer = $("<div>", {class: "simpleDragContainer"});
+                        var $dragCol1 = $("<div>", {"class": "dragCol"});
+                        var $dragCol2 = $("<div>", {"class": "dragCol"});
+                        
+                        var cont = 0;
                         $.each(config.drags, function (key, value) {
                             var $drag;
                             foo.drags[key] = {};
@@ -51,7 +120,7 @@
                                                 theaudio.pause();
                                                 theaudio.currentTime = 0;
                                             } else {
-                                                $("div.dragContainer .dragElement .audiobtn").each(function () {
+                                                $(".audiobtn", $container).each(function () {
                                                     if ($(this).prop("key") !== key) {
                                                         $(this).prop("audio")[0].pause();
                                                         $(this).prop("audio")[0].currentTime = 0;
@@ -100,69 +169,19 @@
                                 }
                             });
                             foo.drags[key].posicion = {top: $drag.position().top, left: $drag.position().left};
-                            $dragContainer.append($drag);
-                        });
-
-                        var $dropContainer = $("<div>", {class: "dropContainer"});
-                        $.each(config.drops, function (key, value) {
-                            foo.drops[key] = {};
-                            var $drop = $("<div>", {"class": "simpleDropElement"});
-                            foo.drops[key].obj = $drop;
-                            foo.drops[key].current_drag = null;
-                            foo.drops[key].correct = false;
-                            $drop.droppable({
-                                drop: function (event, ui) {
-                                    var curDrag = foo.drops[key].current_drag;
-                                    var dragKey = $(ui.draggable).prop("key");
-                                    if (curDrag === null)
-                                    {
-                                        foo.drops[key].current_drag = dragKey;
-                                    }
-                                    else {
-                                        if (curDrag !== $(ui.draggable).prop("key")) {
-                                            moverDrag(foo.drags[curDrag].obj, foo.drags[curDrag].posicion);
-                                            foo.drops[key].current_drag = dragKey;
-                                        }
-                                    }
-                                    ui.draggable.position({
-                                        my: "center",
-                                        at: "center",
-                                        of: $(this)
-                                    });
-                                    foo.drops[key].correct = value.accepted.indexOf(foo.drops[key].current_drag) >= 0;
-                                },
-                                out: function (event, ui) {
-                                    var curDrag = foo.drops[key].current_drag;
-                                    if (curDrag !== null && ($(ui.draggable).prop("key") === foo.drops[key].current_drag)) {
-                                        foo.drops[key].current_drag = null;
-                                        foo.drops[key].correct = false;
-                                    }
-                                }
-                            });
-
-                            var $ele_drop;
-                            switch (config.tipo_drops) {
-                                case "texto":
-                                {
-                                    $ele_drop = $("<span>").html(value.contenido);
-                                    break;
-                                }
-                                case "imagen":
-                                {
-                                    $ele_drop = $("<img>", {src: value.contenido});
-                                    break;
-                                }
-                                case "default":
-                                {
-                                    console.error("El tipo de drop especificado no existe");
-                                    break;
-                                }
+                            if(cont % 2 === 0){
+                                $dragCol1.append($drag);
+                            }else{
+                                $dragCol2.append($drag);
                             }
-                            $drop.append($ele_drop);
-                            $dropContainer.append($drop);
+                            cont++;
                         });
-                        $container.append($dragContainer);
-                        $container.append($dropContainer);
+                        $dragContainer.append($dragCol1);
+                        $dragContainer.append($dragCol2);
+                        var $innerContainer = $("<div>", {class:"dragDropContainer"})
+                        $innerContainer.append($dropsContainer);
+                        $innerContainer.append($dragContainer);
+                        $container.append($innerContainer);
 
                         var $p = $("<p>", {"class": "pregunta"}).html(config.pregunta);
                         $container.prepend($p);
@@ -171,96 +190,7 @@
 
                     case "categoria":
                     {
-                        var $dragContainer = $("<div>", {class: "dragContainer"});
-                        $.each(config.drags, function (key, value) {
-                            var $drag;
-                            foo.drags[key] = {};
-
-                            if (value.hasOwnProperty("contenido")) {
-                                var $ele_drag;
-                                switch (config.tipo_drags) {
-                                    case "texto":
-                                    {
-                                        $ele_drag = $("<span>").html(value.contenido);
-                                        break;
-                                    }
-                                    case "imagen":
-                                    {
-                                        $ele_drag = $("<img>", {src: value.contenido});
-                                        break;
-                                    }
-
-                                    case "audio":
-                                    {
-                                        var $audio = $("<audio>", {src: value.contenido});
-                                        $ele_drag = $("<div>", {class: "audiobtn"}).html("<i class='fa fa-play'></i>");
-                                        $ele_drag.prop("audio", $audio);
-                                        $ele_drag.prop("key", key);
-                                        $ele_drag.click(function () {
-                                            var theaudio = $(this).prop("audio")[0];
-                                            if (!theaudio.paused && !theaudio.ended && 0 < theaudio.currentTime) {
-                                                theaudio.pause();
-                                                theaudio.currentTime = 0;
-                                            } else {
-                                                $("div.dragContainer .dragElement .audiobtn").each(function () {
-                                                    if ($(this).prop("key") !== key) {
-                                                        $(this).prop("audio")[0].pause();
-                                                        $(this).prop("audio")[0].currentTime = 0;
-                                                    }
-                                                });
-                                                $ele_drag.prop("audio")[0].play();
-                                            }
-                                        });
-
-                                        $audio.on("playing", function () {
-                                            $ele_drag.html("<i class='fa fa-stop'></i>");
-                                        });
-
-                                        $audio.on("ended", function () {
-                                            $ele_drag.html("<i class='fa fa-play'></i>");
-                                        });
-
-                                        $audio.on("pause", function () {
-                                            $ele_drag.html("<i class='fa fa-play'></i>");
-                                        });
-                                        break;
-                                    }
-
-                                    case "default":
-                                    {
-                                        console.error("El tipo de drop especificado no existe");
-                                        break;
-                                    }
-                                }
-                                $drag = $("<div>", {"class": "dragElement"}).append($ele_drag);
-                            }
-                            else {
-                                console.error("El contenido de un drop no ha sido definido correctamente.");
-                            }
-
-                            $drag.prop("key", key);
-                            foo.drags[key].obj = $drag;
-                            $drag.draggable({
-                                stop: function () {
-                                    var returnToOrigin = true;
-                                    var dragKey = $(this).prop("key");
-                                    $.each(foo.drops, function (key, value) {
-                                        if (value.current_drags !== null && value.current_drags.hasOwnProperty(dragKey)) {
-                                            returnToOrigin = false;
-                                            return false;
-                                        }
-                                    });
-
-                                    if (returnToOrigin) {
-                                        moverDrag($(this), foo.drags[key].posicion);
-                                    }
-                                }
-                            });
-                            foo.drags[key].posicion = {top: $drag.position().top, left: $drag.position().left};
-                            $dragContainer.append($drag);
-                        });
-
-                        var $dropContainer = $("<div>", {class: "dropContainer"});
+                        var $dropsContainer = $("<div>", {class: "categoryDropsContainer"});
                         $.each(config.drops, function (key, value) {
                             foo.drops[key] = {};
 
@@ -283,7 +213,7 @@
                                 }
                             }
 
-                            var $drop = $("<div>", {"class": "categoryDropElement"});
+                            var $drop = $("<div>", {"class": "dropElement"});
                             $drop.append($ele_drop);
                             foo.drops[key].obj = $drop;
                             foo.drops[key].current_drags = {};
@@ -319,15 +249,123 @@
                                         }
                                         foo.drops[key].correct = correct;
                                     }
+                                },
+                                tolerance: "pointer"
+                            });
+                            
+                            var $dropContainer = $("<div>", {class:"dropContainer"});
+                            var $eleDropContainer = $("<div>", {class:"eleDropContainer"});
+                            $eleDropContainer.append($ele_drop);
+                            $dropContainer.append($eleDropContainer);
+                            $dropContainer.append($drop);
+                            $dropsContainer.append($dropContainer);
+                        });
+                        
+                        
+                        var $dragsContainer = $("<div>", {class: "categoryDragsContainer"});
+                        var $dragContainer = $("<div>", {class: "categoryDragContainer"});
+                        var cont = 0;
+                        $.each(config.drags, function (key, value) {
+                            cont++;
+                            var $drag;
+                            foo.drags[key] = {};
+
+                            if (value.hasOwnProperty("contenido")) {
+                                var $ele_drag;
+                                switch (config.tipo_drags) {
+                                    case "texto":
+                                    {
+                                        $ele_drag = $("<span>").html(value.contenido);
+                                        break;
+                                    }
+                                    case "imagen":
+                                    {
+                                        $ele_drag = $("<img>", {src: value.contenido});
+                                        break;
+                                    }
+
+                                    case "audio":
+                                    {
+                                        var $audio = $("<audio>", {src: value.contenido});
+                                        $ele_drag = $("<div>", {class: "audiobtn"}).html("<i class='fa fa-play'></i>");
+                                        $ele_drag.prop("audio", $audio);
+                                        $ele_drag.prop("key", key);
+                                        $ele_drag.click(function () {
+                                            var theaudio = $(this).prop("audio")[0];
+                                            if (!theaudio.paused && !theaudio.ended && 0 < theaudio.currentTime) {
+                                                theaudio.pause();
+                                                theaudio.currentTime = 0;
+                                            } else {
+                                                $(".audiobtn", $container).each(function () {
+                                                    if ($(this).prop("key") !== key) {
+                                                        $(this).prop("audio")[0].pause();
+                                                        $(this).prop("audio")[0].currentTime = 0;
+                                                    }
+                                                });
+                                                $ele_drag.prop("audio")[0].play();
+                                            }
+                                        });
+
+                                        $audio.on("playing", function () {
+                                            $ele_drag.html("<i class='fa fa-stop'></i>");
+                                        });
+
+                                        $audio.on("ended", function () {
+                                            $ele_drag.html("<i class='fa fa-play'></i>");
+                                        });
+
+                                        $audio.on("pause", function () {
+                                            $ele_drag.html("<i class='fa fa-play'></i>");
+                                        });
+                                        break;
+                                    }
+
+                                    case "default":
+                                    {
+                                        console.error("El tipo de drop especificado no existe");
+                                        break;
+                                    }
+                                }
+                                $drag = $("<div>", {"class": "dragElement"}).append($ele_drag);
+                            }
+                            else {
+                                console.error("El contenido de un drop no ha sido definido correctamente.");
+                            }
+                            
+                            $drag.prop("key", key);
+                            foo.drags[key].obj = $drag;
+                            $drag.draggable({
+                                stop: function () {
+                                    var returnToOrigin = true;
+                                    var dragKey = $(this).prop("key");
+                                    $.each(foo.drops, function (key, value) {
+                                        if (value.current_drags !== null && value.current_drags.hasOwnProperty(dragKey)) {
+                                            returnToOrigin = false;
+                                            return false;
+                                        }
+                                    });
+
+                                    if (returnToOrigin) {
+                                        moverDrag($(this), foo.drags[key].posicion);
+                                    }
                                 }
                             });
-                            $dropContainer.append($drop);
+                            foo.drags[key].posicion = {top: $drag.position().top, left: $drag.position().left};
+                            if(cont<=6){
+                                 $dragContainer.append($drag);
+                            }else{
+                                $dragsContainer.append($dragContainer);
+                                $dragContainer = $("<div>", {class: "categoryDragContainer"});
+                                $dragContainer.append($drag);
+                                cont = 0;
+                            }
                         });
+                        $dragsContainer.append($dragContainer);
                         var $p = $("<p>", {"class": "pregunta"}).html(config.pregunta);
-
-
-                        $container.append($dragContainer);
-                        $container.append($dropContainer);
+                        var $innerContainer = $("<div>", {class:"dragDropContainer category"})
+                        $innerContainer.append($dropsContainer);
+                        $innerContainer.append($dragsContainer);
+                        $container.append($innerContainer);
                         $container.prepend($p);
                         break;
                     }
@@ -338,9 +376,9 @@
                         break;
                     }
                 }
-
-                var $button = $("<button>", {"class": "dragDropButton"});
-                $button.html("Enviar");
+                var $btnContainer = $("<div>",{class: "dragDropBtnContainer"});
+                var $button = $("<button>", {class: "dragDropButton"});
+                $button.html("Validar");
 
                 $button.click(function () {
 
@@ -351,6 +389,7 @@
 
                     foo.intentos++;
                     var correct = true;
+                    console.log(foo.drops);
                     $.each(foo.drops, function (key, value) {
                         if (!value.correct) {
                             correct = false;
@@ -415,8 +454,8 @@
                         }
                     }
                 });
-
-                $container.append($button);
+                $btnContainer.append($button);
+                $container.append($btnContainer);
             } else {
                 console.log("Error en configuración del Drag and Drop");
             }

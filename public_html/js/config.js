@@ -122,176 +122,197 @@
  ]
  });
  
- $("#prueba").dragAndDrop({
- tipologia: "sencillo",
- pregunta: "Arrastre cada elemento sobre el elemento correcto",
- tipo_drags: "audio",
- tipo_drops: "texto", 
- intentos: 2,
- drags: {
- "1": {
- contenido: "media/dog.mp3"
- },
- "2": {
- contenido: "media/organo.mp3"
- }
- },
- drops: {
- "1": {
- contenido: "Órgano",
- accepted: ["2"]
- },
- "2": {
- contenido: "Perro",
- accepted: ["1"]
- }
- }
- });
- 
- $("#prueba2").dragAndDrop({
- tipologia: "categoria",
- pregunta: "Arrastre los elementos sobre la categoría correcta",
- tipo_drags: "audio",
- tipo_drops: "imagen",
- intentos: 2,
- drags: {
- 1: {
- contenido: "media/dog.mp3"
- },
- 2: {
- contenido: "media/organo.mp3"
- }
- ,
- 3: {
- contenido: "media/organo.mp3"
- }
- },
- drops: {
- "1": {
- contenido: "img/boy.jpg",
- accepted: ["3", "2"]
- },
- "2": {
- contenido: "img/girl.jpg",
- accepted: ["1"]
- }
- }
- });
- });
- 
- $(document).on("Retroalimentacion_DragAndDrop", function(evt){
- if(evt.correct){
- //retroalimentación correcto
- alert("respuesta correcta");
- }else{
- console.log(evt.intentos_restantes);
- if(evt.intentos_restantes > 0){
- //retroalimentación volver a intentarlo (aun quedan intentos)
- alert("Tiene "+evt.intentos_restantes+ " intentos restantes.");
- }
- else{
- //retroalimentación incorrecto 
- alert("respuesta incorrecta");
- }
- }
- });
- $(document).on("Retroalimentacion_Puntaje", function(evt){
- alert((evt.puntaje_obtenido/evt.total)*100+"%");
- });
- });
- 
- **/
-
-$(document).ready(function () {
-    $("#prueba").ahorcado({
-        palabras: ["perro sucio", "gato gordo", "casa limpia", "guitarra", "espada"],
-        cantidad_palabras: 3,
-        oportunidades_palabra: 6,
-        vidas: 2,
-        imagenes: {
+ */
+$("document").ready(function () {
+    $("#prueba").dragAndDrop({
+        tipologia: "categoria",
+        pregunta: "Arrastre cada elemento sobre la categoría correcta",
+        tipo_drags: "audio",
+        tipo_drops: "texto",
+        intentos: 2,
+        drags: {
             1: {
-                url: "img/HangMan-07.svg",
-                intentos_restantes: 0
+                contenido: "media/organo.mp3"
             },
             2: {
-                url: "img/HangMan-06.svg",
-                intentos_restantes: 1
+                contenido: "media/organo.mp3"
             },
             3: {
-                url: "img/HangMan-05.svg",
-                intentos_restantes: 2
+                contenido: "media/organo.mp3"
             },
             4: {
-                url: "img/HangMan-04.svg",
-                intentos_restantes: 3
+                contenido: "media/organo.mp3"
             },
             5: {
-                url: "img/HangMan-03.svg",
-                intentos_restantes: 4
+                contenido: "media/organo.mp3"
             },
             6: {
-                url: "img/HangMan-02.svg",
-                intentos_restantes: 5
+                contenido: "media/organo.mp3"
             },
             7: {
-                url: "img/HangMan-01.svg",
-                intentos_restantes: 6
+                contenido: "media/organo.mp3"
+            }
+        },
+        drops: {
+            1: {
+                contenido: "Amarillos",
+                accepted: [1,3]
+            },
+            2: {
+                contenido: "Rojos",
+                accepted: [2]
+            },
+            3: {
+                contenido: "Verdes",
+                accepted: [4,5]
             }
         }
     });
+
+/*
+    $("#prueba2").dragAndDrop({
+        tipologia: "categoria",
+        pregunta: "Arrastre los elementos sobre la categoría correcta",
+        tipo_drags: "audio",
+        tipo_drops: "imagen",
+        intentos: 2,
+        drags: {
+            1: {
+                contenido: "media/dog.mp3"
+            },
+            2: {
+                contenido: "media/organo.mp3"
+            }
+            ,
+            3: {
+                contenido: "media/organo.mp3"
+            }
+        },
+        drops: {
+            "1": {
+                contenido: "img/boy.jpg",
+                accepted: ["3", "2"]
+            },
+            "2": {
+                contenido: "img/girl.jpg",
+                accepted: ["1"]
+            }
+        }
+    });*/
 });
 
-$(document).on("Inicio_Ahorcado", function (evt) {
-    console.log("asdasd");
-    $(".blackout>div").hide();
-    $(".blackout .instruccion").fadeIn(500);
-    
-    $(".blackout").css('display', 'flex').hide().fadeIn(500);
-
-    $(".blackout").click(function () {
-        $(this).fadeOut(500);
-    });
-    
-    $(".blackout .instruccion .iconContainer").click(function () {
-        $(".blackout").fadeOut(500);
-    });
-
-    $(".blackout .instruccion").click(function (event) {
-        event.stopPropagation();
-    });
-    
-    $(".blackout .retroalimentacion").click(function (event) {
-        event.stopPropagation();
-    });
-    
-});
-
-$(document).on("Retroalimentacion_Ahorcado", function (evt) {
+$(document).on("Retroalimentacion_DragAndDrop", function (evt) {
     if (evt.correct) {
-        $(".blackout>div").hide();
-        $(".blackout .retroalimentacion.correcto").fadeIn(500);
-        $(".blackout").fadeIn(500);
+        //retroalimentación correcto
+        alert("respuesta correcta");
     } else {
+        console.log(evt.intentos_restantes);
         if (evt.intentos_restantes > 0) {
-            $(".blackout>div").hide();
-            $(".blackout .retroalimentacion.otro_intento").show();
-            $(".blackout").fadeIn(500);
-            $(".blackout .retroalimentacion.otro_intento button").click(function(){
-                $(".blackout").fadeOut(500);
-            });
+            //retroalimentación volver a intentarlo (aun quedan intentos)
+            alert("Tiene " + evt.intentos_restantes + " intentos restantes.");
         }
         else {
             //retroalimentación incorrecto 
-            $(".blackout>div").hide();
-            $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
-            $(".blackout").fadeIn(500);
-            $(".blackout .retroalimentacion.incorrecto button").click(function(){
-                evt.container.reiniciar_ahorcado();
-                $(".blackout").fadeOut(500);
-            });
+            alert("respuesta incorrecta");
         }
     }
+    $(document).on("Retroalimentacion_Puntaje", function (evt) {
+        alert((evt.puntaje_obtenido / evt.total) * 100 + "%");
+    });
 });
+
+
+
+/*
+ $(document).ready(function () {
+ $("#prueba").ahorcado({
+ palabras: ["perro limpio", "gato gordo", "casa", "guitarra", "espada"],
+ cantidad_palabras: 3,
+ oportunidades_palabra: 6,
+ vidas: 2,
+ imagenes: {
+ 1: {
+ url: "img/HangMan-07.svg",
+ intentos_restantes: 0
+ },
+ 2: {
+ url: "img/HangMan-06.svg",
+ intentos_restantes: 1
+ },
+ 3: {
+ url: "img/HangMan-05.svg",
+ intentos_restantes: 2
+ },
+ 4: {
+ url: "img/HangMan-04.svg",
+ intentos_restantes: 3
+ },
+ 5: {
+ url: "img/HangMan-03.svg",
+ intentos_restantes: 4
+ },
+ 6: {
+ url: "img/HangMan-02.svg",
+ intentos_restantes: 5
+ },
+ 7: {
+ url: "img/HangMan-01.svg",
+ intentos_restantes: 6
+ }
+ }
+ });
+ });
+ 
+ $(document).on("Inicio_Ahorcado", function (evt) {
+ $(".blackout>div").hide();
+ $(".blackout .instruccion").fadeIn(500);
+ 
+ $(".blackout").css('display', 'flex').hide().fadeIn(500);
+ 
+ $(".blackout").click(function () {
+ $(this).fadeOut(500);
+ });
+ 
+ $(".blackout .instruccion .iconContainer").click(function () {
+ $(".blackout").fadeOut(500);
+ });
+ 
+ $(".blackout .instruccion").click(function (event) {
+ event.stopPropagation();
+ });
+ 
+ $(".blackout .retroalimentacion").click(function (event) {
+ event.stopPropagation();
+ });
+ 
+ });
+ 
+ $(document).on("Retroalimentacion_Ahorcado", function (evt) {
+ if (evt.correct) {
+ $(".blackout>div").hide();
+ $(".blackout .retroalimentacion.correcto").fadeIn(500);
+ $(".blackout").fadeIn(500);
+ } else {
+ if (evt.intentos_restantes > 0) {
+ $(".blackout>div").hide();
+ $(".blackout .retroalimentacion.otro_intento").show();
+ $(".blackout").fadeIn(500);
+ $(".blackout .retroalimentacion.otro_intento button").click(function(){
+ $(".blackout").fadeOut(500);
+ });
+ }
+ else {
+ //retroalimentación incorrecto 
+ $(".blackout>div").hide();
+ $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
+ $(".blackout").fadeIn(500);
+ $(".blackout .retroalimentacion.incorrecto button").click(function(){
+ evt.container.reiniciar_ahorcado();
+ $(".blackout").fadeOut(500);
+ });
+ }
+ }
+ });*/
 
 
 
