@@ -30,6 +30,28 @@ div.simpleDropElement img, div.categoryDropElement img{
     width: 100%;
 }
 
+.blackout .retroalimentacion .buttonContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.blackout .retroalimentacion button{
+        width: 50%;
+        padding: 20px;
+        font-size: 12pt;
+        border-radius: 15px;
+        border: 1px solid lightgray;
+}
+
+.blackout .retroalimentacion button:hover{
+        width: 50%;
+        padding: 20px;
+        font-size: 12pt;
+        border-radius: 15px;
+        border: 1px solid lightgray;
+}
+
 /*------------------------------- SIMPLE -------------------------------------- */
 
 div.dragDropContainer{
@@ -66,6 +88,14 @@ div.simpleDropsContainer div.dropContainer div.eleDropContainer{
 }
 
 div.simpleDropsContainer div.dropContainer div.eleDropContainer span{
+    margin: 0 auto;
+}
+
+div.simpleDropsContainer div.dropContainer div.eleDropContainer img{
+    width: 25%;
+}
+
+div.simpleDropsContainer div.dropContainer div.eleDropContainer .audiobtn{
     margin: 0 auto;
 }
 
@@ -163,9 +193,19 @@ div.categoryDropsContainer div.dropContainer .eleDropContainer{
     flex-direction: row;
     align-items: center;
     font-size: 20px;
+    padding: 10px;
 }
 
 div.categoryDropsContainer div.dropContainer .eleDropContainer span{
+    margin: 0 auto;
+}
+
+div.categoryDropsContainer div.dropContainer .eleDropContainer img{
+    width: 25%;
+    margin: 0 auto;
+}
+
+div.categoryDropsContainer div.dropContainer .eleDropContainer .audiobtn{
     margin: 0 auto;
 }
 

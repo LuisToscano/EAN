@@ -127,100 +127,100 @@ $("document").ready(function () {
     $("#prueba").dragAndDrop({
         tipologia: "categoria",
         pregunta: "Arrastre cada elemento sobre la categoría correcta",
-        tipo_drags: "audio",
+        tipo_drags: "texto",
         tipo_drops: "texto",
         intentos: 2,
         drags: {
             1: {
-                contenido: "media/organo.mp3"
+                contenido: "elemento 1"
             },
             2: {
-                contenido: "media/organo.mp3"
+                contenido: "elemento 2"
             },
             3: {
-                contenido: "media/organo.mp3"
+                contenido: "elemento 3"
             },
             4: {
-                contenido: "media/organo.mp3"
+                contenido: "elemento 4"
             },
             5: {
-                contenido: "media/organo.mp3"
+                contenido: "elemento 5"
             },
             6: {
-                contenido: "media/organo.mp3"
-            },
-            7: {
-                contenido: "media/organo.mp3"
+                contenido: "elemento 6"
             }
         },
         drops: {
             1: {
                 contenido: "Amarillos",
-                accepted: [1,3]
+                accepted: [1, 3]
             },
             2: {
-                contenido: "Rojos",
+                contenido: "Verdes",
                 accepted: [2]
             },
             3: {
-                contenido: "Verdes",
-                accepted: [4,5]
+                contenido: "Rojos",
+                accepted: [4, 5]
             }
         }
     });
+});
 
-/*
-    $("#prueba2").dragAndDrop({
-        tipologia: "categoria",
-        pregunta: "Arrastre los elementos sobre la categoría correcta",
-        tipo_drags: "audio",
-        tipo_drops: "imagen",
-        intentos: 2,
-        drags: {
-            1: {
-                contenido: "media/dog.mp3"
-            },
-            2: {
-                contenido: "media/organo.mp3"
-            }
-            ,
-            3: {
-                contenido: "media/organo.mp3"
-            }
-        },
-        drops: {
-            "1": {
-                contenido: "img/boy.jpg",
-                accepted: ["3", "2"]
-            },
-            "2": {
-                contenido: "img/girl.jpg",
-                accepted: ["1"]
-            }
-        }
-    });*/
+$(document).on("Inicio_DragAndDrop", function (evt) {
+    $(".blackout>div").hide();
+    $(".blackout .instruccion").fadeIn(500);
+    $(".blackout").css('display', 'flex').hide().fadeIn(500);
+
+    $(".blackout").click(function () {
+        $(this).fadeOut(500);
+    });
+
+    $(".blackout .instruccion .iconContainer").click(function () {
+        $(".blackout").fadeOut(500);
+    });
+
+    $(".blackout .instruccion").click(function (event) {
+        event.stopPropagation();
+    });
+
+    $(".blackout .retroalimentacion").click(function (event) {
+        event.stopPropagation();
+    });
+
 });
 
 $(document).on("Retroalimentacion_DragAndDrop", function (evt) {
     if (evt.correct) {
-        //retroalimentación correcto
-        alert("respuesta correcta");
+        $(".blackout>div").hide();
+        $(".blackout .retroalimentacion.correcto").fadeIn(500);
+        $(".blackout").fadeIn(500);
+        
+        $(".blackout .retroalimentacion.correcto button").click(function () {
+                evt.container.reiniciar_dragDrop();
+                $(".blackout").fadeOut(500);
+        });
     } else {
-        console.log(evt.intentos_restantes);
         if (evt.intentos_restantes > 0) {
-            //retroalimentación volver a intentarlo (aun quedan intentos)
-            alert("Tiene " + evt.intentos_restantes + " intentos restantes.");
+            $(".blackout>div").hide();
+            $(".blackout .retroalimentacion.otro_intento").show();
+            $(".blackout").fadeIn(500);
+            $(".blackout .retroalimentacion.otro_intento button").click(function () {
+                $(".blackout").fadeOut(500);
+            });
         }
         else {
             //retroalimentación incorrecto 
-            alert("respuesta incorrecta");
+            $(".blackout>div").hide();
+            $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
+            $(".blackout").fadeIn(500);
+            $(".blackout .retroalimentacion.incorrecto button").click(function () {
+                evt.container.reiniciar_dragDrop();
+                $(".blackout").fadeOut(500);
+            });
         }
     }
-    $(document).on("Retroalimentacion_Puntaje", function (evt) {
-        alert((evt.puntaje_obtenido / evt.total) * 100 + "%");
-    });
 });
-
 
 
 /*

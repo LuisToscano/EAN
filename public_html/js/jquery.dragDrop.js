@@ -8,6 +8,7 @@
     $.fn.extend({
         dragAndDrop: function (config) {
             var $container = $(this);
+            $container.prop("config", config);
             $container.prop("info", {drags: {}, drops: {}, intentos: 0});
             var foo = $container.prop("info");
             if (config.hasOwnProperty("tipologia") &&
@@ -71,6 +72,41 @@
                                 {
                                     $ele_drop = $("<img>", {src: value.contenido});
                                     break;
+                                }
+                                case "audio":
+                                    {
+                                        var $audio = $("<audio>", {src: value.contenido});
+                                        $ele_drop = $("<div>", {class: "audiobtn"}).html("<i class='fa fa-play'></i>");
+                                        $ele_drop.prop("audio", $audio);
+                                        $ele_drop.prop("key", key);
+                                        $ele_drop.click(function () {
+                                            var theaudio = $(this).prop("audio")[0];
+                                            if (!theaudio.paused && !theaudio.ended && 0 < theaudio.currentTime) {
+                                                theaudio.pause();
+                                                theaudio.currentTime = 0;
+                                            } else {
+                                                $(".audiobtn", $container).each(function () {
+                                                    if ($(this).prop("key") !== key) {
+                                                        $(this).prop("audio")[0].pause();
+                                                        $(this).prop("audio")[0].currentTime = 0;
+                                                    }
+                                                });
+                                                $ele_drop.prop("audio")[0].play();
+                                            }
+                                        });
+
+                                        $audio.on("playing", function () {
+                                            $ele_drop.html("<i class='fa fa-stop'></i>");
+                                        });
+
+                                        $audio.on("ended", function () {
+                                            $ele_drop.html("<i class='fa fa-play'></i>");
+                                        });
+
+                                        $audio.on("pause", function () {
+                                            $ele_drop.html("<i class='fa fa-play'></i>");
+                                        });
+                                        break;
                                 }
                                 case "default":
                                 {
@@ -205,6 +241,41 @@
                                 {
                                     $ele_drop = $("<img>", {src: value.contenido});
                                     break;
+                                }
+                                case "audio":
+                                    {
+                                        var $audio = $("<audio>", {src: value.contenido});
+                                        $ele_drop = $("<div>", {class: "audiobtn"}).html("<i class='fa fa-play'></i>");
+                                        $ele_drop.prop("audio", $audio);
+                                        $ele_drop.prop("key", key);
+                                        $ele_drop.click(function () {
+                                            var theaudio = $(this).prop("audio")[0];
+                                            if (!theaudio.paused && !theaudio.ended && 0 < theaudio.currentTime) {
+                                                theaudio.pause();
+                                                theaudio.currentTime = 0;
+                                            } else {
+                                                $(".audiobtn", $container).each(function () {
+                                                    if ($(this).prop("key") !== key) {
+                                                        $(this).prop("audio")[0].pause();
+                                                        $(this).prop("audio")[0].currentTime = 0;
+                                                    }
+                                                });
+                                                $ele_drop.prop("audio")[0].play();
+                                            }
+                                        });
+
+                                        $audio.on("playing", function () {
+                                            $ele_drop.html("<i class='fa fa-stop'></i>");
+                                        });
+
+                                        $audio.on("ended", function () {
+                                            $ele_drop.html("<i class='fa fa-play'></i>");
+                                        });
+
+                                        $audio.on("pause", function () {
+                                            $ele_drop.html("<i class='fa fa-play'></i>");
+                                        });
+                                        break;
                                 }
                                 case "default":
                                 {
@@ -382,14 +453,13 @@
 
                 $button.click(function () {
 
-                    $("div.dragContainer .dragElement .audiobtn").each(function () {
+                    $(".audiobtn", $container).each(function () {
                         $(this).prop("audio")[0].pause();
                         $(this).prop("audio")[0].currentTime = 0;
                     });
 
                     foo.intentos++;
                     var correct = true;
-                    console.log(foo.drops);
                     $.each(foo.drops, function (key, value) {
                         if (!value.correct) {
                             correct = false;
@@ -400,7 +470,8 @@
                     if (correct) {
                         var objEvt = {
                                 type: "Retroalimentacion_DragAndDrop",
-                                correct: true 
+                                correct: true,
+                                container: $container
                             };
                         $(document).trigger(objEvt);
                         $.each(foo.drags, function (key, value) {
@@ -408,20 +479,25 @@
                         });
                     } else {
                         if (foo.intentos >= config.intentos) {
+                            
+                            $(".audiobtn", $container).off();
+                            
                              var objEvt = {
                                 type: "Retroalimentacion_DragAndDrop",
                                 correct: false,
-                                intentos_restantes: 0
+                                intentos_restantes: 0,
+                                container: $container
                             };
                             $(document).trigger(objEvt);
                             $.each(foo.drags, function (key, value) {
                                 value.obj.draggable("destroy");
                             });
-                        } else {
+                        } else { 
                             var objEvt = {
                                 type: "Retroalimentacion_DragAndDrop",
                                 correct: false,
-                                intentos_restantes: (config.intentos - foo.intentos)
+                                intentos_restantes: (config.intentos - foo.intentos),
+                                container: $container
                             };
                             $(document).trigger(objEvt);
                             switch (config.tipologia) {
@@ -457,7 +533,22 @@
                 $btnContainer.append($button);
                 $container.append($btnContainer);
             } else {
-                console.log("Error en configuración del Drag and Drop");
+                console.error("Error en configuración del Drag and Drop");
+            }
+            
+            if(!config.hasOwnProperty("reinicio")){
+                var objEvt = {
+                    type: "Inicio_DragAndDrop"
+                };
+                $(document).trigger(objEvt);
+            }
+        },
+        reiniciar_dragDrop: function(){
+            var config = $(this).prop("config");    
+            if(config!==null && typeof config === "object"){
+                $(this).empty();
+                config.reinicio = true;
+                $(this).dragAndDrop(config);
             }
         }
     });
