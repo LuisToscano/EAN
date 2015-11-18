@@ -8,6 +8,7 @@
     $.fn.extend({
         generarPreguntas: function (config) {
             var $container = $(this);
+            $container.prop("config", config);
             $container.prop("info", {preguntas: {}, current_question: 0});
             var foo = $container.prop("info");
             shuffle(config.preguntas);
@@ -43,7 +44,7 @@
                             } else {
                                 foo.preguntas[key].tipo = "one";
                             }
-
+                            var $optionContainer = $("<div>", {class: "optionContainer"});
                             $.each(value.picks, function (keys, values) {
                                 var $input;
                                 if (foo.preguntas[key].tipo === "many") {
@@ -87,8 +88,9 @@
 
                                 $p = $("<p>", {"class": "opcion_respuesta"}).html(createElement(value.tipo_elementos, values.contenido, keys));
                                 $p.prepend($input);
-                                $question_tab.append($p);
+                                $optionContainer.append($p);
                             });
+                            $question_tab.append($optionContainer);
                             break;
                         }
 
@@ -121,11 +123,15 @@
                         case "completar":
                         {
                             $p = $("<p>", {class: "parrafoCompletar"});
-                            var replaceStr = value.parrafo;
-                            while (replaceStr.indexOf("<espacio>") > 0) {
-                                replaceStr = replaceStr.replace("<espacio>", "<input type='text' initialized='false'>");
-                            }
-                            $p.html(replaceStr);
+                            $.each(value.parrafos, function (keys, values) {
+                                var replaceStr = values;
+                                while (replaceStr.indexOf("<espacio>") > 0) {
+                                    replaceStr = replaceStr.replace("<espacio>", "<input type='text' initialized='false'>");
+                                }
+                                var $minip = $("<p>", {class: "parrafo"});
+                                $minip.append(replaceStr);
+                                $p.append($minip);
+                            });
 
                             if (Object.keys(value.respuestas).length !== $("input", $p).length) {
                                 console.log("ERROR: La cantidad de espacios en el párrafo y respuestas en la configuración no concuerdan");
@@ -133,7 +139,7 @@
 
                             $.each(value.respuestas, function (keys, values) {
                                 var $next = $("input[initialized='false']", $p).first();
-                                $next.attr("size", 10);
+                                $next.attr("size", 15);
                                 if ($next.length > 0) {
                                     $next.removeAttr("initialized");
                                     $next.prop("key", keys);
@@ -191,12 +197,12 @@
                                 $div.html(createElement(value.tipo_columna_1, values.contenido, keys));
 
                                 $div.click(function () {
-                                    
-                                    if(selected!=null){
+
+                                    if (selected != null) {
                                         selected.css("border", "0px");
                                         selected = null;
                                     }
-                                    
+
                                     selected = $(this);
                                     var color = getRandomColor();
                                     $(this).prop("color", color);
@@ -321,12 +327,29 @@
                         });
                     }
                 });
-                $btn.html("Enviar Respuesta");
-                $container.append($btn);
-                $("#tab_pregunta_0").show();
+                $btn.html("Siguiente");
+                var $btnContainer = $("<div>", {class: "btnContainer"});
+                $btnContainer.append($btn);
+                $container.append($btnContainer);
+                $("#tab_pregunta_0").css("display", "flex").hide().fadeIn(500);
             }
             else {
                 console.log("Error en la configuración");
+            }
+            if(!config.hasOwnProperty("reinicio")){
+                var objEvt = {
+                    type: "Inicio_Puntaje",
+                    container: $container
+                };
+                $(document).trigger(objEvt);
+            }
+        },
+        reiniciar_preguntas: function(){
+            var config = $(this).prop("config");    
+            if(config!==null && typeof config === "object"){
+                $(this).empty();
+                config.reinicio = true;
+                $(this).generarPreguntas(config);
             }
         }
     });

@@ -8,8 +8,15 @@ and open the template in the editor.
     Author     : End User
 */
 
+body{
+    font-family: sans-serif;
+}
+
 div[id^="tab"] {
     display: none;
+    flex-direction:column;
+    min-height: 300px;
+    background-color: white;
 }
 
 span.numeracion{
@@ -20,8 +27,15 @@ div[id^=tab_pregunta]{
     padding-bottom: 5px;
 }
 
-#prueba{
-    padding-bottom: 20px;
+p.pregunta{
+    background-color: #676767;
+    color: white;
+    padding: 20px;
+}
+
+div.optionContainer{
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 div.audiobtn{
@@ -37,6 +51,25 @@ div.audiobtn:hover{
     cursor: pointer;
 }
 
+div.btnContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: white;
+}
+
+div.btnContainer button{
+    padding: 15px;
+    margin: 20px;
+    background-color: #e8e8e8;
+    width: 180px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #dedede;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 /*------------------------------ RELACIONAR --------------------------------------*/
 
 .relacionarContainer{
@@ -45,26 +78,45 @@ div.audiobtn:hover{
 }
 
 .relacionarContainer .relacionarSpacer{
-    width: 150px;
+    flex: 1 1;
 }
 
-.relacionarContainer .relacionarColumna1 div:not(.audiobtn), .relacionarContainer .relacionarColumna2 div:not(.audiobtn){
-    margin: 5px;
+.relacionarContainer .relacionarColumna1, .relacionarContainer .relacionarColumna2{
+    display: flex;
+    flex-direction: column;
+    flex: 2 0;
+}
+
+.relacionarContainer .relacionarColumna1>div, .relacionarContainer .relacionarColumna2>div{
+   flex:1;
+   display: flex;
+   flex-direction: row;
+   align-items:center;
+}
+
+.relacionarContainer .relacionarColumna1>div, .relacionarContainer .relacionarColumna2>div{
+    margin: 5px 20px 5px 20px;
     padding: 5px;
-    background-color: lightgray; 
+    background-color: #e8e8e8; 
 }
 
-.relacionarContainer .relacionarColumna1 div span, .relacionarContainer .relacionarColumna2 div span{
-    max-width: 100px;
-}
-
-.relacionarContainer .relacionarColumna1 div img, .relacionarContainer .relacionarColumna2 div img{
-    width: 100px;
-    height: 100px;
-}
-
-.relacionarContainer .relacionarColumna1 div:hover, .relacionarContainer .relacionarColumna2 div:hover{
+.relacionarContainer .relacionarColumna1>div:hover, .relacionarContainer .relacionarColumna2>div:hover{
     cursor: pointer;
+}
+
+.relacionarContainer .relacionarColumna1 span, .relacionarContainer .relacionarColumna2 span{
+    margin-left: 10px;
+    padding: 10px;
+}
+
+.relacionarContainer .relacionarColumna1 img, .relacionarContainer .relacionarColumna2 img{
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+}
+
+.relacionarContainer .relacionarColumna1 .audiobtn, .relacionarContainer .relacionarColumna2 .audiobtn{
+   margin: 0 auto;
 }
 
 /*------------------------------ PICK MANY --------------------------------------*/
@@ -72,20 +124,70 @@ div.audiobtn:hover{
 p.opcion_respuesta{
     display: flex;
     flex-direction: row;
+    background-color: #e8e8e8;
+    padding: 20px;
+    align-items: center;
 }
 
 p.opcion_respuesta img{
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
+    margin-left: 10px;
+}
+
+p.opcion_respuesta .audiobtn{
+    margin-left: 10px;
+}
+
+input[type="checkbox"]{
+  width: 20px; 
+  height: 20px; 
 }
 
 /*------------------------------ SORTABLE --------------------------------------*/
 
+ul.listaSortable{
+   list-style: none; 
+}
+
 .listaSortable li{
-    margin-bottom: 5px;
+    background-color: #e8e8e8;
+    width: 90%;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.listaSortable li:hover{
+   cursor: pointer;
 }
 
 .listaSortable li img{
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
+}
+
+/*------------------------------ COMPLETAR --------------------------------------*/
+
+p.parrafoCompletar{
+    padding-left: 5%;
+    padding-right: 5%;
+    padding: 0 5% 0px 5%;
+}
+
+p.parrafoCompletar .parrafo{
+    margin-bottom: 25px;
+    line-height: 180%;
+    text-align: justify;
+}
+
+p.parrafoCompletar input{
+    background: #bf7d00;
+    color: #000000;
+    border: 0px;
+    height: 30px;
+    padding: 0px 10px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 5px;
 }
