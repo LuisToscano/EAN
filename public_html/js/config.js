@@ -146,24 +146,27 @@ $(document).on("Inicio_Puntaje", function (evt) {
 });
 
 $(document).on("Retroalimentacion_Puntaje", function (evt) {
-    if (evt.puntaje_obtenido < evt.total) {
-        $(".blackout>div").hide();
-        $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
-        $(".blackout").fadeIn(500);
-        $(".blackout .retroalimentacion.incorrecto button").click(function () {
-            evt.container.reiniciar_preguntas();
-            $(".blackout").fadeOut(500);
-        });
-    } else {
-        $(".blackout>div").hide();
-        $(".blackout .retroalimentacion.correcto").fadeIn(500);
-        $(".blackout").fadeIn(500);
-
-        $(".blackout .retroalimentacion.correcto button").click(function () {
-            evt.container.reiniciar_preguntas();
-            $(".blackout").fadeOut(500);
-        });
+    $(".blackout .retroalimentacion.puntaje .resultado").html(evt.puntaje_obtenido+"/"+evt.total);
+    var mensaje = "";
+    if (evt.puntaje_obtenido <= 6) {
+        mensaje = "<p>Mensaje para menos de 6 preguntas correctas</p>";
+    }else{
+        if(evt.puntaje_obtenido <= 9){
+            mensaje = "<p>Mensaje para entre 7 y 9 preguntas correctas</p>";
+        }else{
+            if(evt.puntaje_obtenido ===10){
+                mensaje = "<p>Mensaje para entre 10 preguntas correctas</p>";
+            }
+        }
     }
+    $(".blackout .retroalimentacion.puntaje .mensaje").html(mensaje);
+    $(".blackout>div").hide();
+    $(".blackout .retroalimentacion.puntaje").fadeIn(500);
+    $(".blackout").fadeIn(500);
+    $(".blackout .retroalimentacion.puntaje button").click(function () {
+        evt.container.reiniciar_preguntas();
+        $(".blackout").fadeOut(500);
+    });
 });
 
 /*

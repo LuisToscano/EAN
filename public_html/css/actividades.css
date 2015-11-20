@@ -12,13 +12,6 @@ body{
     font-family: sans-serif;
 }
 
-div[id^="tab"] {
-    display: none;
-    flex-direction:column;
-    min-height: 300px;
-    background-color: white;
-}
-
 span.numeracion{
     font-weight: bold;
 }
@@ -68,6 +61,13 @@ div.btnContainer button{
     border: 1px solid #dedede;
     cursor: pointer;
     font-size: 16px;
+}
+
+div[id^="tab"] {
+    display: none;
+    flex-direction:column;
+    min-height: 300px;
+    background-color: white;
 }
 
 /*------------------------------ RELACIONAR --------------------------------------*/
