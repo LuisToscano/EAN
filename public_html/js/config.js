@@ -1,5 +1,111 @@
 
 $("document").ready(function () {
+    $("#prueba").dragAndDrop({
+        tipologia: "categoria", //categoria o sencillo
+        pregunta: "Arrastre cada elemento sobre la categoría correcta", //enunciado para visualizarse previo a la actividad
+        tipo_drags: "texto", //imagen, audio o texto
+        tipo_drops: "texto", //imagen, audio o texto
+        intentos: 2,
+        drags: {
+            1: {
+                contenido: "elemento 1" //si tipo_drags es audio o imagen, debe agregarse la url del archivo. ej: img/boy.jpg - media/perro.mp3
+            },
+            2: {
+                contenido: "elemento 2"
+            },
+            3: {
+                contenido: "elemento 3"
+            },
+            4: {
+                contenido: "elemento 4"
+            },
+            5: {
+                contenido: "elemento 5"
+            },
+            6: {
+                contenido: "elemento 6"
+            }
+        },
+        drops: {
+            1: {
+                contenido: "Amarillos", //si tipo_drops es audio o imagen, debe agregarse la url del archivo. ej: img/boy.jpg - media/perro.mp3
+                accepted: [1, 3] //identificadores (separados por coma) de los drags que deben ir en este drop.
+            },
+            2: {
+                contenido: "Verdes",
+                accepted: [2]
+            },
+            3: {
+                contenido: "Rojos",
+                accepted: [4, 5]
+            }
+        }
+    });
+});
+
+$(document).on("Inicio_DragAndDrop", function (evt) {
+
+    //evento que se dispara al terminar de cargar la actividad.
+
+    //mostrar instrucciones
+    $(".blackout>div").hide();
+    $(".blackout .instruccion").fadeIn(500);
+    $(".blackout").css('display', 'flex').hide().fadeIn(500);
+
+    $(".blackout .instruccion .iconContainer").click(function () {
+        $(".blackout").fadeOut(500);
+    });
+
+});
+
+$(document).on("Retroalimentacion_DragAndDrop", function (evt) {
+
+    //evento que se dispara cuando el usuario da clic al botón de validar respuesta
+
+    if (evt.correct) {
+
+        //cuando la respuesta es correcta
+
+        //mostrar realimentación correcto
+        $(".blackout>div").hide();
+        $(".blackout .retroalimentacion.correcto").fadeIn(500);
+        $(".blackout").fadeIn(500);
+
+        $(".blackout .retroalimentacion.correcto button").click(function () {
+            evt.container.reiniciar_dragDrop();
+            $(".blackout").fadeOut(500);
+        });
+    } else {
+        if (evt.intentos_restantes > 0) {
+
+            //cuando la respuesta es incorrecta pero aun quedan intentos
+
+            //mostrar retroalimentación volver a intentarlo
+            $(".blackout>div").hide();
+            $(".blackout .retroalimentacion.otro_intento").show();
+            $(".blackout").fadeIn(500);
+            $(".blackout .retroalimentacion.otro_intento button").click(function () {
+                $(".blackout").fadeOut(500);
+            });
+        }
+        else {
+            //cuando la respuesta es incorrecta y ya no hay mas intentos
+
+            //mostrar retroalimentación incorrecto
+            $(".blackout>div").hide();
+            $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
+            $(".blackout").fadeIn(500);
+            $(".blackout .retroalimentacion.incorrecto button").click(function () {
+                evt.container.reiniciar_dragDrop();
+                $(".blackout").fadeOut(500);
+            });
+        }
+    }
+});
+
+/*
+
+$("document").ready(function () {
     $("#prueba").generarPreguntas({
         cantidad_preguntas: 5, //número de preguntas que saldrán en la actividad (se escogen al azar entre las descritas en "preguntas"
         preguntas: [//banco de preguntas separadas por coma
@@ -171,113 +277,6 @@ $(document).on("Retroalimentacion_Puntaje", function (evt) {
     });
 });
 
-
-$("document").ready(function () {
-    $("#prueba").dragAndDrop({
-        tipologia: "categoria", //categoria o sencillo
-        pregunta: "Arrastre cada elemento sobre la categoría correcta", //enunciado para visualizarse previo a la actividad
-        tipo_drags: "texto", //imagen, audio o texto
-        tipo_drops: "texto", //imagen, audio o texto
-        intentos: 2,
-        drags: {
-            1: {
-                contenido: "elemento 1" //si tipo_drags es audio o imagen, debe agregarse la url del archivo. ej: img/boy.jpg - media/perro.mp3
-            },
-            2: {
-                contenido: "elemento 2"
-            },
-            3: {
-                contenido: "elemento 3"
-            },
-            4: {
-                contenido: "elemento 4"
-            },
-            5: {
-                contenido: "elemento 5"
-            },
-            6: {
-                contenido: "elemento 6"
-            }
-        },
-        drops: {
-            1: {
-                contenido: "Amarillos", //si tipo_drops es audio o imagen, debe agregarse la url del archivo. ej: img/boy.jpg - media/perro.mp3
-                accepted: [1, 3] //identificadores (separados por coma) de los drags que deben ir en este drop.
-            },
-            2: {
-                contenido: "Verdes",
-                accepted: [2]
-            },
-            3: {
-                contenido: "Rojos",
-                accepted: [4, 5]
-            }
-        }
-    });
-});
-
-$(document).on("Inicio_DragAndDrop", function (evt) {
-
-    //evento que se dispara al terminar de cargar la actividad.
-
-    //mostrar instrucciones
-    $(".blackout>div").hide();
-    $(".blackout .instruccion").fadeIn(500);
-    $(".blackout").css('display', 'flex').hide().fadeIn(500);
-
-    $(".blackout .instruccion .iconContainer").click(function () {
-        $(".blackout").fadeOut(500);
-    });
-
-});
-
-$(document).on("Retroalimentacion_DragAndDrop", function (evt) {
-
-    //evento que se dispara cuando el usuario da clic al botón de validar respuesta
-
-    if (evt.correct) {
-
-        //cuando la respuesta es correcta
-
-        //mostrar realimentación correcto
-        $(".blackout>div").hide();
-        $(".blackout .retroalimentacion.correcto").fadeIn(500);
-        $(".blackout").fadeIn(500);
-
-        $(".blackout .retroalimentacion.correcto button").click(function () {
-            evt.container.reiniciar_dragDrop();
-            $(".blackout").fadeOut(500);
-        });
-    } else {
-        if (evt.intentos_restantes > 0) {
-
-            //cuando la respuesta es incorrecta pero aun quedan intentos
-
-            //mostrar retroalimentación volver a intentarlo
-            $(".blackout>div").hide();
-            $(".blackout .retroalimentacion.otro_intento").show();
-            $(".blackout").fadeIn(500);
-            $(".blackout .retroalimentacion.otro_intento button").click(function () {
-                $(".blackout").fadeOut(500);
-            });
-        }
-        else {
-            //cuando la respuesta es incorrecta y ya no hay mas intentos
-
-            //mostrar retroalimentación incorrecto
-            $(".blackout>div").hide();
-            $(".blackout .retroalimentacion.incorrecto").fadeIn(500);
-            $(".blackout").fadeIn(500);
-            $(".blackout .retroalimentacion.incorrecto button").click(function () {
-                evt.container.reiniciar_dragDrop();
-                $(".blackout").fadeOut(500);
-            });
-        }
-    }
-});
-
-
-
 $(document).ready(function () {
     $("#prueba").ahorcado({
         palabras: ["perro limpio", "gato gordo", "casa", "guitarra", "espada"], //banco de palabras o frases
@@ -339,6 +338,10 @@ $(document).on("Retroalimentacion_Ahorcado", function (evt) {
         $(".blackout>div").hide();
         $(".blackout .retroalimentacion.correcto").fadeIn(500);
         $(".blackout").fadeIn(500);
+        $(".blackout .retroalimentacion.correcto button").click(function () {
+            evt.container.reiniciar_ahorcado();
+            $(".blackout").fadeOut(500);
+        });
     } else {
         //retroalimentación vuelve a intentarlo 
         if (evt.intentos_restantes > 0) {
@@ -360,7 +363,7 @@ $(document).on("Retroalimentacion_Ahorcado", function (evt) {
             });
         }
     }
-});
+});*/
 
 
 

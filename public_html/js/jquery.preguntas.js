@@ -1,8 +1,3 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 (function ($) {
     $.fn.extend({
@@ -134,7 +129,7 @@
                             });
 
                             if (Object.keys(value.respuestas).length !== $("input", $p).length) {
-                                console.log("ERROR: La cantidad de espacios en el párrafo y respuestas en la configuración no concuerdan");
+                                console.error("ERROR: La cantidad de espacios en el párrafo y respuestas en la configuración no concuerdan");
                             }
 
                             $.each(value.respuestas, function (keys, values) {
@@ -183,7 +178,7 @@
                         case "relacionar":
                         {
                             if (Object.keys(value.columna_1).length !== Object.keys(value.columna_2).length) {
-                                console.log("El numero de elementos en cada columna no coincide");
+                                console.error("El numero de elementos en cada columna no coincide");
                                 return false;
                             }
 
@@ -209,7 +204,7 @@
                                     $(this).css("border", "3px solid " + color);
 
                                     var thekey = $(this).prop("key");
-                                    $(".relacionarContainer .relacionarColumna2 div").each(function () {
+                                    $(".relacionarContainer .relacionarColumna2 div", $question_tab).each(function () {
                                         if ($(this).prop("current_col1") == thekey) {
                                             $(this).css("border", "0px");
                                             $(this).prop("current_col1", null);
@@ -245,7 +240,7 @@
 
                                     if ($(this).prop("current_col1") !== null) {
                                         var cur = $(this).prop("current_col1");
-                                        $(".relacionarContainer .relacionarColumna1 div").each(function () {
+                                        $(".relacionarContainer .relacionarColumna1 div", $question_tab).each(function () {
                                             if ($(this).prop("key") == cur) {
                                                 $(this).css("border", "0px");
                                             }
@@ -254,14 +249,14 @@
 
                                     $(this).prop("current_col1", selectedKey);
                                     var correct = true;
-                                    $(".relacionarContainer .relacionarColumna2 div").each(function () {
+                                    $(".relacionarContainer .relacionarColumna2 div", $question_tab).each(function () {
                                         if (!$(this).prop("correct")) {
                                             correct = false;
                                             return false;
                                         }
                                     });
                                     var answered = true;
-                                    $(".relacionarContainer .relacionarColumna2 div").each(function () {
+                                    $(".relacionarContainer .relacionarColumna2 div", $question_tab).each(function () {
                                         if ($(this).prop("current_col1") === null) {
                                             answered = false;
                                             return false;
@@ -286,10 +281,11 @@
                 });
                 var $btn = $("<button>", {"class": "btnPreguntas"});
                 $btn.click(function () {
+					/*
                     if (!foo.preguntas[foo.current_question].answered) {
                         alert("Debe responder la pregunta antes de enviar");
                         return;
-                    }
+                    }*/
 
                     $(".audiobtn").each(function () {
                         $(this).prop("audio")[0].pause();
@@ -315,7 +311,7 @@
                                     puntaje += value.puntaje;
                                 }
                             });
-
+							
                             var objEvt = {
                                 type: "Retroalimentacion_Puntaje",
                                 container: $container,
@@ -334,7 +330,7 @@
                 $("#tab_pregunta_0").css("display", "flex").hide().fadeIn(500);
             }
             else {
-                console.log("Error en la configuración");
+                console.error("Error en la configuración");
             }
             if(!config.hasOwnProperty("reinicio")){
                 var objEvt = {
@@ -448,3 +444,32 @@ function createElement(tipo, contenido, key) {
     }
     return $ele_drag;
 }
+
+//soporte móviles
+
+!function (a) {
+    function f(a, b) {
+        if (!(a.originalEvent.touches.length > 1)) {
+            a.preventDefault();
+            var c = a.originalEvent.changedTouches[0], d = document.createEvent("MouseEvents");
+            d.initMouseEvent(b, !0, !0, window, 1, c.screenX, c.screenY, c.clientX, c.clientY, !1, !1, !1, !1, 0, null), a.target.dispatchEvent(d)
+        }
+    }
+    if (a.support.touch = "ontouchend"in document, a.support.touch) {
+        var e, b = a.ui.mouse.prototype, c = b._mouseInit, d = b._mouseDestroy;
+        b._touchStart = function (a) {
+            var b = this;
+            !e && b._mouseCapture(a.originalEvent.changedTouches[0]) && (e = !0, b._touchMoved = !1, f(a, "mouseover"), f(a, "mousemove"), f(a, "mousedown"))
+        }, b._touchMove = function (a) {
+            e && (this._touchMoved = !0, f(a, "mousemove"))
+        }, b._touchEnd = function (a) {
+            e && (f(a, "mouseup"), f(a, "mouseout"), this._touchMoved || f(a, "click"), e = !1)
+        }, b._mouseInit = function () {
+            var b = this;
+            b.element.bind({touchstart: a.proxy(b, "_touchStart"), touchmove: a.proxy(b, "_touchMove"), touchend: a.proxy(b, "_touchEnd")}), c.call(b)
+        }, b._mouseDestroy = function () {
+            var b = this;
+            b.element.unbind({touchstart: a.proxy(b, "_touchStart"), touchmove: a.proxy(b, "_touchMove"), touchend: a.proxy(b, "_touchEnd")}), d.call(b)
+        }
+    }
+}(jQuery);
